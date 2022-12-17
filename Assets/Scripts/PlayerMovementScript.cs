@@ -1,12 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovementScript : MonoBehaviour
 {
     public Rigidbody playerRb;
-    public float speed;
-    public float maxSpeed;
+    public float speed = 10;
+    public float dodgeSpeed = 30;
+    public float dodgeDuration = 0.1f;
+    public float dodgeCooldown = 2;
+
+    bool dodging = false;
+    float dodgeStart;
+    float dodgeEnd;
+    Vector3 dodgeDirection;
     void Start()
     {
  
@@ -14,17 +22,36 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Update()
     {
-        Vector3 force = Vector3.zero;
+        Vector3 move = Vector3.zero;
 
-        if (Input.GetKey("w"))
-            force.z += speed;        
-        if (Input.GetKey("s"))
-            force.z -= speed;
-        if (Input.GetKey("d"))
-            force.x += speed;        
-        if (Input.GetKey("a"))
-            force.x -= speed;
+        if (Input.GetKey("up"))
+            move.z += this.speed;        
+        if (Input.GetKey("down"))
+            move.z -= this.speed;
+        if (Input.GetKey("right"))
+            move.x += this.speed;        
+        if (Input.GetKey("left"))
+            move.x -= this.speed;
 
-        playerRb.velocity = force;
+        if (Input.GetKeyDown("z") && !dodging && Time.time - dodgeEnd >= dodgeCooldown)
+        {
+            dodgeStart = Time.time;
+            dodgeDirection = move.normalized * dodgeSpeed;
+            dodging = true;
+        }
+
+        if (dodging)
+        {
+            if (Time.time >= dodgeStart + dodgeDuration)
+            {
+                dodgeEnd = Time.time;
+                dodging = false;
+            }
+
+            move = dodgeDirection;
+        }
+
+        playerRb.velocity = move;
     }
+
 }
