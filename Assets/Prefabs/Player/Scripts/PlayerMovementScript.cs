@@ -7,15 +7,19 @@ public class PlayerMovementScript : MonoBehaviour
 {
     public Rigidbody playerRb;
     public Animator animator;
+
     public float speed = 10;
     public float dodgeSpeed = 30;
     public float dodgeDuration = 0.1f;
     public float dodgeCooldown = 2;
 
-    bool dodging = false;
     float dodgeStart;
     float dodgeEnd;
     Vector3 dodgeDirection;
+
+    bool isMoving;
+    bool isDodging;
+
     void Start()
     {
  
@@ -23,31 +27,50 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Update()
     {
-        Vector3 move = Vector3.zero;
+        Vector3 inputDirection = Vector3.zero;
 
-        if (Input.GetKey("up"))
-            move.z += 1;        
-        if (Input.GetKey("down"))
-            move.z -= 1;
-        if (Input.GetKey("right"))
-            move.x += 1;        
-        if (Input.GetKey("left"))
-            move.x -= 1;
+        if (Input.GetKey("up") || Input.GetKey("w"))
+            inputDirection.z += 1;        
+        if (Input.GetKey("down") || Input.GetKey("s"))
+            inputDirection.z -= 1;
+        if (Input.GetKey("right") || Input.GetKey("d"))
+            inputDirection.x += 1;        
+        if (Input.GetKey("left") || Input.GetKey("a"))
+            inputDirection.x -= 1;
 
-        move = move.normalized * speed;
-        playerRb.velocity = move;
-        transform.LookAt(playerRb.position + move);
-        animator.SetFloat("Moving", move.magnitude);
+        Move(inputDirection);
+        Dodge(inputDirection);
+    }
 
-        if (Input.GetKeyDown("z") && !dodging && Time.time - dodgeEnd >= dodgeCooldown)
+    void Move(Vector3 inputDirection)
+    {
+        if (inputDirection.magnitude == 0)
+        {
+            playerRb.velocity = Vector3.zero;
+            animator.SetFloat("Moving", 0);
+            isMoving = false;
+        }
+        else if (!isDodging)
+        {
+            Vector3 movementDirection = inputDirection.normalized * speed;
+            playerRb.velocity = movementDirection;
+            transform.LookAt(playerRb.position + movementDirection);
+            animator.SetFloat("Moving", movementDirection.magnitude);
+            isMoving = true;
+        }
+    }
+
+    void Dodge(Vector3 inputDirection)
+    {
+        if (Input.GetKeyDown("z") && isMoving && !isDodging && Time.time - dodgeEnd >= dodgeCooldown)
         {
             dodgeStart = Time.time;
-            dodgeDirection = move.normalized * dodgeSpeed;
+            dodgeDirection = inputDirection.normalized * dodgeSpeed;
             animator.SetFloat("Dodging", 1 / dodgeDuration);
-            dodging = true;
+            isDodging = true;
         }
 
-        if(dodging)
+        if (isDodging)
         {
             playerRb.velocity = dodgeDirection;
             transform.LookAt(playerRb.position + dodgeDirection);
@@ -55,10 +78,9 @@ public class PlayerMovementScript : MonoBehaviour
             if (Time.time >= dodgeStart + dodgeDuration)
             {
                 dodgeEnd = Time.time;
-                dodging = false;
+                isDodging = false;
                 animator.SetFloat("Dodging", 0);
             }
         }
     }
-
 }
