@@ -17,10 +17,6 @@ public class PlayerMovementScript : MonoBehaviour
     bool isMoving;
     bool isDodging;
 
-    void Start()
-    {
-
-    }
 
     void Update()
     {

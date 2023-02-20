@@ -18,7 +18,7 @@ public class LevelGenerator : MonoBehaviour
     public int treasureRoomChance;
     public Vector2 offset;
     public GameObject roomPrefab;
-    public RoomChange roomChange;
+    public PlayerSpawn playerSpawn;
 
     List<Cell> board;
 
@@ -26,12 +26,6 @@ public class LevelGenerator : MonoBehaviour
     void Start()
     {
         MazeGeneration();
-    }
-
-
-    void Update()
-    {
-
     }
 
     void GenerateDungeon()
@@ -78,8 +72,8 @@ public class LevelGenerator : MonoBehaviour
                         room.name += " DEFAULT";
                     }
 
-                    if(cellID == mazeStart) 
-                        roomChange.SetCurrentRoom(room);
+                    if (cellID == mazeStart)
+                        playerSpawn.SpawnPlayer(room);
 
                 }
             }

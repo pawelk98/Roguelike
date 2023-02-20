@@ -5,15 +5,6 @@ using UnityEngine;
 public class RoomChange : MonoBehaviour
 {
     public GameObject currentRoom;
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-        
-    }
 
     public void SetCurrentRoom(GameObject room)
     {
