@@ -12,12 +12,13 @@ public class LevelGenerator : MonoBehaviour
 
     public Vector2Int size;
     public int mazeStart = 0;
-    public int lastRoom;
+    public int mazeEnd;
     public int mazeMaxLength;
     public int offTrackDoorChance;
     public int treasureRoomChance;
     public Vector2 offset;
     public GameObject roomPrefab;
+    public RoomChange roomChange;
 
     List<Cell> board;
 
@@ -42,40 +43,43 @@ public class LevelGenerator : MonoBehaviour
                 int cellID = x + y * size.x;
                 if (board[cellID].visited)
                 {
-                    if(cellID != lastRoom) //boss room has only one entrance
+                    if(cellID != mazeEnd) //boss room has only one entrance
                     {
                         List<int> neighbors = CheckNeighbors(x + y * size.x, true);
                         for (int i = 0; i < neighbors.Count; i++)
                         {
-                            if (Random.Range(0, 99) < offTrackDoorChance && neighbors[i] != lastRoom)
+                            if (Random.Range(0, 99) < offTrackDoorChance && neighbors[i] != mazeEnd)
                                 AddPath(cellID, neighbors[i]);
                         }
                     }
 
                     GameObject room = Instantiate(roomPrefab, new Vector3(x * offset.x, 0, y * offset.y), Quaternion.identity, transform);
-                    room.GetComponent<RoomGenerator>().SetConnections(board[cellID].status);  //set primary path
+                    room.GetComponent<RoomController>().SetConnections(board[cellID].status);  //set primary path
                     room.name = "Room x:" + x + " y:" + y;
 
                     if (cellID == mazeStart)
                     {
-                        room.GetComponent<RoomGenerator>().InitializeRoom(RoomGenerator.RoomType.Start);
+                        room.GetComponent<RoomController>().InitializeRoom(RoomController.RoomType.Start);
                         room.name += " START";
                     }
-                    else if(cellID == lastRoom)
+                    else if(cellID == mazeEnd)
                     {
-                        room.GetComponent<RoomGenerator>().InitializeRoom(RoomGenerator.RoomType.Boss);
+                        room.GetComponent<RoomController>().InitializeRoom(RoomController.RoomType.Boss);
                         room.name += " BOSS";
                     }
                     else if(Random.Range(0,99) < treasureRoomChance)
                     {
-                        room.GetComponent<RoomGenerator>().InitializeRoom(RoomGenerator.RoomType.Treasure);
+                        room.GetComponent<RoomController>().InitializeRoom(RoomController.RoomType.Treasure);
                         room.name += " TREASURE";
                     }
                     else
                     {
-                        room.GetComponent<RoomGenerator>().InitializeRoom(RoomGenerator.RoomType.Default);
+                        room.GetComponent<RoomController>().InitializeRoom(RoomController.RoomType.Default);
                         room.name += " DEFAULT";
                     }
+
+                    if(cellID == mazeStart) 
+                        roomChange.SetCurrentRoom(room);
 
                 }
             }
@@ -102,9 +106,9 @@ public class LevelGenerator : MonoBehaviour
         {
             board[currentCell].visited = true;
 
-            if (currentCell == lastRoom || path.Count == mazeMaxLength)
+            if (currentCell == mazeEnd || path.Count == mazeMaxLength)
             {
-                lastRoom = currentCell;
+                mazeEnd = currentCell;
                 break;
             }
 

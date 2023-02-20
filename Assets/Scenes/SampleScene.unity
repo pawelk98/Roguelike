@@ -575,13 +575,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   size: {x: 5, y: 5}
   mazeStart: 0
-  lastRoom: 100
+  mazeEnd: 100
   mazeMaxLength: 15
   offTrackDoorChance: 40
   treasureRoomChance: 20
   offset: {x: 36, y: 36}
   roomPrefab: {fileID: 8126491525182421792, guid: 380192ad0f2224341a6f00fd420fdf18,
     type: 3}
+  roomChange: {fileID: 1455985904}
 --- !u!1 &1455985897 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 300d5ceb833884948a6eff9ec0c73667,
@@ -648,6 +649,19 @@ Animator:
     type: 3}
   m_PrefabInstance: {fileID: 1934900642}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1455985904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1455985897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b639a3519f6d9242b09e1edf75269c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentRoom: {fileID: 0}
 --- !u!1001 &1934900642
 PrefabInstance:
   m_ObjectHideFlags: 0
