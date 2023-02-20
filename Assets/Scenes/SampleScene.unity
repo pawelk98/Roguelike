@@ -575,9 +575,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   size: {x: 5, y: 5}
   mazeStart: 0
-  mazeDestination: 25
-  mazeMaxLength: 10
-  offTrackDoorChance: 0
+  lastRoom: 100
+  mazeMaxLength: 15
+  offTrackDoorChance: 40
   offset: {x: 36, y: 36}
   roomPrefab: {fileID: 8126491525182421792, guid: 380192ad0f2224341a6f00fd420fdf18,
     type: 3}

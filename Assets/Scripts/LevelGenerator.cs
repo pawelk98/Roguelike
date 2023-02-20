@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,15 +5,17 @@ public class LevelGenerator : MonoBehaviour
 {
     public class Cell
     {
+        public enum Direction { Up, Down, Left, Right }
         public bool visited;
         public bool[] status = new bool[4]; //up, down, left, right
     }
 
     public Vector2Int size;
     public int mazeStart = 0;
-    public int mazeDestination;
+    public int lastRoom;
     public int mazeMaxLength;
-    public float offTrackDoorChance;
+    public int offTrackDoorChance;
+    public int treasureRoomChance;
     public Vector2 offset;
     public GameObject roomPrefab;
 
@@ -23,39 +24,71 @@ public class LevelGenerator : MonoBehaviour
 
     void Start()
     {
-        MazeGenerator();
+        MazeGeneration();
     }
 
 
     void Update()
     {
-        
+
     }
 
     void GenerateDungeon()
     {
-        for(int y = 0; y < size.y; y++)
+        for (int y = 0; y < size.y; y++)
         {
             for (int x = 0; x < size.x; x++)
             {
-                Cell currentCell = board[x + y * size.x];
-                if (currentCell.visited)
+                int cellID = x + y * size.x;
+                if (board[cellID].visited)
                 {
+                    if(cellID != lastRoom) //boss room has only one entrance
+                    {
+                        List<int> neighbors = CheckNeighbors(x + y * size.x, true);
+                        for (int i = 0; i < neighbors.Count; i++)
+                        {
+                            if (Random.Range(0, 99) < offTrackDoorChance && neighbors[i] != lastRoom)
+                                AddPath(cellID, neighbors[i]);
+                        }
+                    }
+
                     GameObject room = Instantiate(roomPrefab, new Vector3(x * offset.x, 0, y * offset.y), Quaternion.identity, transform);
-                    room.GetComponent<RoomGenerator>().SetConnections(currentCell.status);
+                    room.GetComponent<RoomGenerator>().SetConnections(board[cellID].status);  //set primary path
                     room.name = "Room x:" + x + " y:" + y;
+
+                    if (cellID == mazeStart)
+                    {
+                        room.GetComponent<RoomGenerator>().InitializeRoom(RoomGenerator.RoomType.Start);
+                        room.name += " START";
+                    }
+                    else if(cellID == lastRoom)
+                    {
+                        room.GetComponent<RoomGenerator>().InitializeRoom(RoomGenerator.RoomType.Boss);
+                        room.name += " BOSS";
+                    }
+                    else if(Random.Range(0,99) < treasureRoomChance)
+                    {
+                        room.GetComponent<RoomGenerator>().InitializeRoom(RoomGenerator.RoomType.Treasure);
+                        room.name += " TREASURE";
+                    }
+                    else
+                    {
+                        room.GetComponent<RoomGenerator>().InitializeRoom(RoomGenerator.RoomType.Default);
+                        room.name += " DEFAULT";
+                    }
+
                 }
             }
         }
     }
 
-    void MazeGenerator()
+    void MazeGeneration()
     {
         board = new List<Cell>();
 
         for (int y = 0; y < size.y; y++)
         {
-            for(int x = 0; x < size.x; x++)
+            for (int x = 0; x < size.x; x++)
             {
                 board.Add(new Cell());
             }
@@ -63,20 +96,21 @@ public class LevelGenerator : MonoBehaviour
 
         int currentCell = mazeStart;
 
-        Stack<int> path = new Stack <int>();
+        Stack<int> path = new Stack<int>();
 
         while (true)
         {
             board[currentCell].visited = true;
 
-            if (currentCell == mazeDestination || path.Count == mazeMaxLength)
+            if (currentCell == lastRoom || path.Count == mazeMaxLength)
             {
+                lastRoom = currentCell;
                 break;
             }
 
-            List<int> neighbors = checkNeighbors(currentCell);
+            List<int> neighbors = CheckNeighbors(currentCell, false);
 
-            if(neighbors.Count == 0)
+            if (neighbors.Count == 0)
             {
                 if (path.Count == 0)
                 {
@@ -91,67 +125,88 @@ public class LevelGenerator : MonoBehaviour
             {
                 path.Push(currentCell);
                 int newCell = neighbors[Random.Range(0, neighbors.Count)];
-
-                if (newCell > currentCell)  //up or right
-                {
-                    if (newCell - 1 == currentCell)
-                    {
-                        board[currentCell].status[3] = true;
-                        currentCell = newCell;
-                        board[currentCell].status[2] = true;
-                    }
-                    else
-                    {
-                        board[currentCell].status[0] = true;
-                        currentCell = newCell;
-                        board[currentCell].status[1] = true;
-                    }
-                }
-                else   //down or left
-                {
-                    if (newCell + 1 == currentCell)
-                    {
-                        board[currentCell].status[2] = true;
-                        currentCell = newCell;
-                        board[currentCell].status[3] = true;
-                    }
-                    else
-                    {
-                        board[currentCell].status[1] = true;
-                        currentCell = newCell;
-                        board[currentCell].status[0] = true;
-                    }
-                }
+                AddPath(currentCell, newCell);
+                currentCell = newCell;
             }
         }
         GenerateDungeon();
     }
 
-    List<int> checkNeighbors(int cell)
+    List<int> CheckNeighbors(int cell, bool visited)
     {
         List<int> neighbors = new List<int>();
 
         //up
-        if (cell + size.x < board.Count && !board[cell + size.x].visited)
+        if (cell + size.x < board.Count && board[cell + size.x].visited == visited)
         {
             neighbors.Add(cell + size.x);
         }
         //down
-        if (cell - size.x >= 0 && !board[cell - size.x].visited)
+        if (cell - size.x >= 0 && board[cell - size.x].visited == visited)
         {
             neighbors.Add(cell - size.x);
         }
         //left
-        if (cell % size.x != 0 && !board[cell - 1].visited)
+        if (cell % size.x != 0 && board[cell - 1].visited == visited)
         {
             neighbors.Add(cell - 1);
         }
         //right
-        if ((cell + 1) % size.x != 0 && !board[cell + 1].visited)
+        if ((cell + 1) % size.x != 0 && board[cell + 1].visited == visited)
         {
             neighbors.Add(cell + 1);
         }
 
         return neighbors;
+    }
+
+    Cell.Direction NextCellDirection(int source, int destination)
+    {
+        if (destination > source)  //up or right
+        {
+            if (destination - 1 == source)
+            {
+                return Cell.Direction.Right;
+            }
+            else
+            {
+                return Cell.Direction.Up;
+            }
+        }
+        else   //down or left
+        {
+            if (destination + 1 == source)
+            {
+                return Cell.Direction.Left;
+            }
+            else
+            {
+                return Cell.Direction.Down;
+            }
+        }
+    }
+
+    void AddPath(int cell1, int cell2)
+    {
+        if (NextCellDirection(cell1, cell2) == Cell.Direction.Right)
+        {
+            board[cell1].status[3] = true;
+            board[cell2].status[2] = true;
+        }
+        else if (NextCellDirection(cell1, cell2) == Cell.Direction.Up)
+        {
+            board[cell1].status[0] = true;
+            board[cell2].status[1] = true;
+        }
+        else if (NextCellDirection(cell1, cell2) == Cell.Direction.Left)
+        {
+            board[cell1].status[2] = true;
+            board[cell2].status[3] = true;
+        }
+        else if (NextCellDirection(cell1, cell2) == Cell.Direction.Down)
+        {
+            board[cell1].status[1] = true;
+            board[cell2].status[0] = true;
+        }
     }
 }

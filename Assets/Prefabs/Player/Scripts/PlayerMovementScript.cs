@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovementScript : MonoBehaviour
@@ -22,7 +19,7 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Start()
     {
- 
+
     }
 
     void Update()
@@ -30,11 +27,11 @@ public class PlayerMovementScript : MonoBehaviour
         Vector3 inputDirection = Vector3.zero;
 
         if (Input.GetKey("up") || Input.GetKey("w"))
-            inputDirection.z += 1;        
+            inputDirection.z += 1;
         if (Input.GetKey("down") || Input.GetKey("s"))
             inputDirection.z -= 1;
         if (Input.GetKey("right") || Input.GetKey("d"))
-            inputDirection.x += 1;        
+            inputDirection.x += 1;
         if (Input.GetKey("left") || Input.GetKey("a"))
             inputDirection.x -= 1;
 
