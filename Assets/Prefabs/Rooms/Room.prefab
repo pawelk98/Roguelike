@@ -1,92 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2494322318683255777
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5671703561789902064}
-  - component: {fileID: 146826774938076348}
-  - component: {fileID: 1450802839518212649}
-  - component: {fileID: 6771683288870712722}
-  - component: {fileID: 4563562037270767062}
-  m_Layer: 0
-  m_Name: EntranceColliders
-  m_TagString: Room
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5671703561789902064
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2494322318683255777}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8126491525182421795}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &146826774938076348
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2494322318683255777}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4, y: 4, z: 0.5}
-  m_Center: {x: 0, y: 2, z: 17.2}
---- !u!65 &1450802839518212649
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2494322318683255777}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4, y: 4, z: 0.5}
-  m_Center: {x: 0, y: 2, z: -17.2}
---- !u!65 &6771683288870712722
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2494322318683255777}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.5, y: 4, z: 4}
-  m_Center: {x: 17.2, y: 2, z: 0}
---- !u!65 &4563562037270767062
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2494322318683255777}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.5, y: 4, z: 4}
-  m_Center: {x: -17.2, y: 2, z: 0}
 --- !u!1 &4352692475805348164
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,7 +229,7 @@ Transform:
   - {fileID: 1584395761290622341}
   - {fileID: 6684154882111572085}
   m_Father: {fileID: 8126491525182421795}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7158190724702527017
 GameObject:
@@ -371,6 +284,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8126491525182421795}
   - component: {fileID: 5598993942449467940}
+  - component: {fileID: 6193089103567410250}
   m_Layer: 0
   m_Name: Room
   m_TagString: Room
@@ -390,7 +304,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5671703561789902064}
   - {fileID: 4501644094617299897}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -412,8 +325,22 @@ MonoBehaviour:
   - {fileID: 528121916122855203}
   - {fileID: 901825440006993839}
   - {fileID: 6958263059902400989}
-  entranceColliders: {fileID: 2494322318683255777}
   roomAssets: {fileID: 6228368466457234576}
+  boxCollider: {fileID: 6193089103567410250}
+  roomClear: 0
+--- !u!65 &6193089103567410250
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8126491525182421792}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 35, y: 4, z: 35}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1001 &320529807230014579
 PrefabInstance:
   m_ObjectHideFlags: 0

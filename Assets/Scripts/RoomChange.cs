@@ -8,16 +8,16 @@ public class RoomChange : MonoBehaviour
 
     public void SetCurrentRoom(GameObject room)
     {
-        currentRoom = room.GetComponent<Transform>().Find("EntranceColliders").gameObject;
-        currentRoom.GetComponentInParent<RoomController>().EnterRoom();
+        currentRoom = room;
+        currentRoom.GetComponent<RoomController>().EnterRoom();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Room")
         {
-            currentRoom.GetComponentInParent<RoomController>().ExitRoom();
-            other.GetComponentInParent<RoomController>().EnterRoom();
+            currentRoom.GetComponent<RoomController>().ExitRoom();
+            other.GetComponent<RoomController>().EnterRoom();
             currentRoom = other.gameObject;
         }
     }

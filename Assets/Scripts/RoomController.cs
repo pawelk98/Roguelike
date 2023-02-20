@@ -5,8 +5,8 @@ public class RoomController : MonoBehaviour
 {
     public enum RoomType { Start, Boss, Treasure, Default }
     public GameObject[] doors;
-    public GameObject entranceColliders;
     public GameObject roomAssets;
+    public BoxCollider boxCollider;
     public bool roomClear = false;
     RoomType roomType;
     bool[] entrances;
@@ -36,13 +36,13 @@ public class RoomController : MonoBehaviour
     public void InitializeRoom(RoomType roomType)
     {
         this.roomType = roomType;
-        entranceColliders.SetActive(true);
+        boxCollider.enabled = true;
         roomAssets.SetActive(false);
     }
 
     public void EnterRoom()
     {
-        entranceColliders.SetActive(false);
+        boxCollider.enabled = false;
         roomAssets.SetActive(true);
 
         if(!roomClear)
@@ -52,7 +52,7 @@ public class RoomController : MonoBehaviour
     
     public void ExitRoom()
     {
-        entranceColliders.SetActive(true);
+        boxCollider.enabled = true;
         roomAssets.SetActive(false);
     }
 
