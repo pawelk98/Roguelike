@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class RoomController : MonoBehaviour
 {
-    public enum RoomType { Start, Boss, Treasure, Default }
+    public enum RoomType { Default, Start, Boss, Treasure }
     public GameObject[] doors;
     public GameObject roomAssets;
     public BoxCollider boxCollider;
     public bool roomClear = false;
-    RoomType roomType;
+    public RoomType roomType;
     bool[] entrances;
     
 
@@ -17,9 +17,14 @@ public class RoomController : MonoBehaviour
         entrances = new bool[4];
     }
 
+    void Start()
+    {
+        InitializeRoom();
+    }
+
     void Update()
     {
-        if (roomClear)
+        if (Input.GetKey("q") && RoomChange.currentRoom == gameObject)
             RoomClear();
     }
 
@@ -33,9 +38,8 @@ public class RoomController : MonoBehaviour
         }
     }
 
-    public void InitializeRoom(RoomType roomType)
+    public void InitializeRoom()
     {
-        this.roomType = roomType;
         boxCollider.enabled = true;
         roomAssets.SetActive(false);
     }
@@ -61,5 +65,6 @@ public class RoomController : MonoBehaviour
         for(int i = 0; i < 4; i++)
             if (entrances[i])
                 doors[i].SetActive(false);
+        roomClear = true;
     }
 }

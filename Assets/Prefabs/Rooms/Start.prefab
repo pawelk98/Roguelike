@@ -160,7 +160,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4c93db6697afbe14aa2e0ea5538e9130, type: 2}
+  - {fileID: 2100000, guid: 93b72ba81cac8d042bac77bbd5714b49, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -286,7 +286,7 @@ GameObject:
   - component: {fileID: 5598993942449467940}
   - component: {fileID: 6193089103567410250}
   m_Layer: 0
-  m_Name: Room
+  m_Name: Start
   m_TagString: Room
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -328,6 +328,7 @@ MonoBehaviour:
   roomAssets: {fileID: 6228368466457234576}
   boxCollider: {fileID: 6193089103567410250}
   roomClear: 0
+  roomType: 1
 --- !u!65 &6193089103567410250
 BoxCollider:
   m_ObjectHideFlags: 0

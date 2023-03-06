@@ -472,8 +472,11 @@ MonoBehaviour:
   offTrackDoorChance: 40
   treasureRoomChance: 20
   offset: {x: 36, y: 36}
-  roomPrefab: {fileID: 8126491525182421792, guid: 380192ad0f2224341a6f00fd420fdf18,
-    type: 3}
+  roomPrefabs:
+  - {fileID: 8126491525182421792, guid: 380192ad0f2224341a6f00fd420fdf18, type: 3}
+  - {fileID: 8126491525182421792, guid: 95c28c87304c6ae48ba779a6ad5ee42e, type: 3}
+  - {fileID: 8126491525182421792, guid: 1776b41403fd4ca40a4f9570aac832bd, type: 3}
+  - {fileID: 8126491525182421792, guid: d54c717dce3ac0b43912dd5791d6829c, type: 3}
   playerSpawn: {fileID: 1205395267}
 --- !u!114 &1205395267
 MonoBehaviour:

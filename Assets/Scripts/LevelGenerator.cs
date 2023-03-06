@@ -17,7 +17,7 @@ public class LevelGenerator : MonoBehaviour
     public int offTrackDoorChance;
     public int treasureRoomChance;
     public Vector2 offset;
-    public GameObject roomPrefab;
+    public List<GameObject> roomPrefabs;
     public PlayerSpawn playerSpawn;
 
     List<Cell> board;
@@ -47,30 +47,28 @@ public class LevelGenerator : MonoBehaviour
                         }
                     }
 
+                    GameObject roomPrefab;
+                    if (cellID == mazeStart)
+                    {
+                        roomPrefab = roomPrefabs[1];
+                    }
+                    else if(cellID == mazeEnd)
+                    {
+                        roomPrefab = roomPrefabs[2];
+                    }
+                    else if(Random.Range(0,99) < treasureRoomChance)
+                    {
+                        roomPrefab = roomPrefabs[3];
+                    }
+                    else
+                    {
+                        roomPrefab = roomPrefabs[0];
+                    }
+
                     GameObject room = Instantiate(roomPrefab, new Vector3(x * offset.x, 0, y * offset.y), Quaternion.identity, transform);
                     room.GetComponent<RoomController>().SetConnections(board[cellID].status);  //set primary path
                     room.name = "Room x:" + x + " y:" + y;
 
-                    if (cellID == mazeStart)
-                    {
-                        room.GetComponent<RoomController>().InitializeRoom(RoomController.RoomType.Start);
-                        room.name += " START";
-                    }
-                    else if(cellID == mazeEnd)
-                    {
-                        room.GetComponent<RoomController>().InitializeRoom(RoomController.RoomType.Boss);
-                        room.name += " BOSS";
-                    }
-                    else if(Random.Range(0,99) < treasureRoomChance)
-                    {
-                        room.GetComponent<RoomController>().InitializeRoom(RoomController.RoomType.Treasure);
-                        room.name += " TREASURE";
-                    }
-                    else
-                    {
-                        room.GetComponent<RoomController>().InitializeRoom(RoomController.RoomType.Default);
-                        room.name += " DEFAULT";
-                    }
 
                     if (cellID == mazeStart)
                         playerSpawn.SpawnPlayer(room);

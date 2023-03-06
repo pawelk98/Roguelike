@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RoomChange : MonoBehaviour
 {
-    public GameObject currentRoom;
+    public static GameObject currentRoom;
 
     public void SetCurrentRoom(GameObject room)
     {
