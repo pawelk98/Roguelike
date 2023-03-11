@@ -1,4 +1,5 @@
-using Unity.VisualScripting;
+using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class RoomController : MonoBehaviour
@@ -6,10 +7,14 @@ public class RoomController : MonoBehaviour
     public enum RoomType { Default, Start, Boss, Treasure }
     public GameObject[] doors;
     public GameObject roomAssets;
+    public Transform roomAssetsTransform;
     public BoxCollider boxCollider;
     public bool roomClear = false;
     public RoomType roomType;
+    public GameObject startInterior;
+    public List<GameObject> defaultInteriors;
     bool[] entrances;
+
     
 
     void Awake()
@@ -19,13 +24,14 @@ public class RoomController : MonoBehaviour
 
     void Start()
     {
-        InitializeRoom();
+        
     }
 
     void Update()
     {
         if (Input.GetKey("q") && RoomChange.currentRoom == gameObject)
             RoomClear();
+
     }
 
     public void SetConnections(bool[] status)
@@ -38,8 +44,19 @@ public class RoomController : MonoBehaviour
         }
     }
 
-    public void InitializeRoom()
+    public void InitializeRoom(RoomType roomType)
     {
+        this.roomType = roomType;
+        switch (roomType)
+        {
+            case RoomType.Start:
+                GameObject interior = Instantiate(startInterior);
+                interior.transform.SetParent(roomAssetsTransform);
+                roomClear = true;
+                break;
+        }
+
+
         boxCollider.enabled = true;
         roomAssets.SetActive(false);
     }

@@ -6,7 +6,7 @@ public class LevelGenerator : MonoBehaviour
     public class Cell
     {
         public enum Direction { Up, Down, Left, Right }
-        public bool visited;
+        public bool visited; 
         public bool[] status = new bool[4]; //up, down, left, right
     }
 
@@ -17,7 +17,7 @@ public class LevelGenerator : MonoBehaviour
     public int offTrackDoorChance;
     public int treasureRoomChance;
     public Vector2 offset;
-    public List<GameObject> roomPrefabs;
+    public GameObject roomPrefab;
     public PlayerSpawn playerSpawn;
 
     List<Cell> board;
@@ -47,28 +47,28 @@ public class LevelGenerator : MonoBehaviour
                         }
                     }
 
-                    GameObject roomPrefab;
+
+                    GameObject room = Instantiate(roomPrefab, new Vector3(x * offset.x, 0, y * offset.y), Quaternion.identity, transform);
+                    RoomController roomController = room.GetComponent<RoomController>();
+                    roomController.SetConnections(board[cellID].status);  //set primary path
+                    room.name = "Room x:" + x + " y:" + y;
+
                     if (cellID == mazeStart)
                     {
-                        roomPrefab = roomPrefabs[1];
+                        roomController.InitializeRoom(RoomController.RoomType.Start);
                     }
                     else if(cellID == mazeEnd)
                     {
-                        roomPrefab = roomPrefabs[2];
+                        roomController.InitializeRoom(RoomController.RoomType.Boss);
                     }
                     else if(Random.Range(0,99) < treasureRoomChance)
                     {
-                        roomPrefab = roomPrefabs[3];
+                        roomController.InitializeRoom(RoomController.RoomType.Treasure);
                     }
                     else
                     {
-                        roomPrefab = roomPrefabs[0];
+                        roomController.InitializeRoom(RoomController.RoomType.Default);
                     }
-
-                    GameObject room = Instantiate(roomPrefab, new Vector3(x * offset.x, 0, y * offset.y), Quaternion.identity, transform);
-                    room.GetComponent<RoomController>().SetConnections(board[cellID].status);  //set primary path
-                    room.name = "Room x:" + x + " y:" + y;
-
 
                     if (cellID == mazeStart)
                         playerSpawn.SpawnPlayer(room);
