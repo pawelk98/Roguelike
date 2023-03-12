@@ -47,12 +47,18 @@ public class RoomController : MonoBehaviour
     public void InitializeRoom(RoomType roomType)
     {
         this.roomType = roomType;
+        GameObject interior;
         switch (roomType)
         {
             case RoomType.Start:
-                GameObject interior = Instantiate(startInterior);
-                interior.transform.SetParent(roomAssetsTransform);
+                interior = Instantiate(startInterior, roomAssetsTransform);
                 roomClear = true;
+                break;
+            case RoomType.Default:
+                interior = Instantiate(defaultInteriors[Random.Range(0, defaultInteriors.Count - 1)], roomAssetsTransform);
+                break;
+            default:
+                interior = Instantiate(startInterior, roomAssetsTransform);
                 break;
         }
 
