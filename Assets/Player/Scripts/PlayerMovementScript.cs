@@ -9,13 +9,17 @@ public class PlayerMovementScript : MonoBehaviour
     public float dodgeSpeed = 30;
     public float dodgeDuration = 0.1f;
     public float dodgeCooldown = 2;
+    public float attackSpeed = 1f;
 
+    float attackStart;
     float dodgeStart;
     float dodgeEnd;
     Vector3 dodgeDirection;
 
     bool isMoving;
     bool isDodging;
+    bool isAttacking;
+    GameObject chestInRange;
 
 
     void Update()
@@ -33,17 +37,19 @@ public class PlayerMovementScript : MonoBehaviour
 
         Move(inputDirection);
         Dodge(inputDirection);
+        Attack(inputDirection);
+        Interact();
     }
 
     void Move(Vector3 inputDirection)
     {
-        if (inputDirection.magnitude == 0)
+        if (inputDirection.magnitude == 0 || isAttacking)
         {
             playerRb.velocity = Vector3.zero;
             animator.SetFloat("Moving", 0);
             isMoving = false;
         }
-        else if (!isDodging)
+        else if (!isDodging && !isAttacking)
         {
             Vector3 movementDirection = inputDirection.normalized * speed;
             playerRb.velocity = movementDirection;
@@ -75,5 +81,46 @@ public class PlayerMovementScript : MonoBehaviour
                 animator.SetFloat("Dodging", 0);
             }
         }
+    }
+
+    void Attack(Vector3 inputDirection)
+    {
+        if (Input.GetKeyDown("c") && !isDodging && !isAttacking)
+        {
+            attackStart = Time.time;
+            animator.SetFloat("Attack_Melee", attackSpeed);
+            isAttacking = true;
+        }
+
+        if (isAttacking && Time.time - attackStart >= 1 / attackSpeed)
+        {
+            animator.SetFloat("Attack_Melee", 0);
+            isAttacking = false;
+        }
+    }
+
+    void Interact()
+    {
+        if(Input.GetKeyDown("v"))
+        {
+            if(chestInRange != null)
+            {
+                chestInRange.GetComponent<ChestController>().Open();
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Chest")
+            chestInRange = other.gameObject;
+        else if (isAttacking && other.gameObject.tag == "Enemy")
+            Debug.Log("You hit an enemy");
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject == chestInRange)
+            chestInRange = null;
     }
 }
