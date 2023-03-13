@@ -8,10 +8,16 @@ public class ChestController : MonoBehaviour
     public bool state;
     public int coinsRangeMin;
     public int coinsRangeMax;
+    public int spawnChance;
     int coins;
 
     private void Start()
     {
+        if(Random.Range(0,100) <= spawnChance)
+            gameObject.SetActive(true);
+        else
+            gameObject.SetActive(false);
+
         coins = Random.Range(coinsRangeMin, coinsRangeMax);
     }
 
