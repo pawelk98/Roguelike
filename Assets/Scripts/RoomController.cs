@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class RoomController : MonoBehaviour
@@ -14,8 +13,7 @@ public class RoomController : MonoBehaviour
     public GameObject startInterior;
     public List<GameObject> defaultInteriors;
     bool[] entrances;
-
-    
+    public MeshRenderer[] meshRenderers;
 
     void Awake()
     {
@@ -24,7 +22,9 @@ public class RoomController : MonoBehaviour
 
     void Start()
     {
-        
+        meshRenderers = roomAssets.GetComponentsInChildren<MeshRenderer>();
+        if(RoomChange.currentRoom != this.gameObject)
+            SetMeshRenderersState(meshRenderers, false);
     }
 
     void Update()
@@ -62,17 +62,15 @@ public class RoomController : MonoBehaviour
                 break;
         }
 
-
         boxCollider.enabled = true;
-        roomAssets.SetActive(false);
     }
 
     public void EnterRoom()
     {
         boxCollider.enabled = false;
-        roomAssets.SetActive(true);
+        SetMeshRenderersState(meshRenderers, true);
 
-        if(!roomClear)
+        if (!roomClear)
             foreach (GameObject d in doors)
                 d.SetActive(true);
     }
@@ -80,7 +78,7 @@ public class RoomController : MonoBehaviour
     public void ExitRoom()
     {
         boxCollider.enabled = true;
-        roomAssets.SetActive(false);
+        SetMeshRenderersState(meshRenderers, false);
     }
 
     public void RoomClear()
@@ -89,5 +87,11 @@ public class RoomController : MonoBehaviour
             if (entrances[i])
                 doors[i].SetActive(false);
         roomClear = true;
+    }
+
+    void SetMeshRenderersState(MeshRenderer[] renderers, bool state)
+    {
+        foreach (MeshRenderer r in renderers)
+            r.enabled = state;
     }
 }

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class LevelGenerator : MonoBehaviour
 {
@@ -10,6 +12,8 @@ public class LevelGenerator : MonoBehaviour
         public bool[] status = new bool[4]; //up, down, left, right
     }
 
+    public static bool generated;
+
     public Vector2Int size;
     public int mazeStart = 0;
     public int mazeEnd;
@@ -19,6 +23,7 @@ public class LevelGenerator : MonoBehaviour
     public Vector2 offset;
     public GameObject roomPrefab;
     public PlayerSpawn playerSpawn;
+    public NavMeshSurface navMeshSurface;
 
     List<Cell> board;
 
@@ -30,6 +35,7 @@ public class LevelGenerator : MonoBehaviour
 
     void GenerateDungeon()
     {
+        GameObject startingRoom = null;
         for (int y = 0; y < size.y; y++)
         {
             for (int x = 0; x < size.x; x++)
@@ -56,6 +62,7 @@ public class LevelGenerator : MonoBehaviour
                     if (cellID == mazeStart)
                     {
                         roomController.InitializeRoom(RoomController.RoomType.Start);
+                        startingRoom = room;
                     }
                     else if(cellID == mazeEnd)
                     {
@@ -69,13 +76,13 @@ public class LevelGenerator : MonoBehaviour
                     {
                         roomController.InitializeRoom(RoomController.RoomType.Default);
                     }
-
-                    if (cellID == mazeStart)
-                        playerSpawn.SpawnPlayer(room);
-
                 }
             }
         }
+
+        navMeshSurface.BuildNavMesh();
+        generated = true;
+        playerSpawn.SpawnPlayer(startingRoom);
     }
 
     void MazeGeneration()

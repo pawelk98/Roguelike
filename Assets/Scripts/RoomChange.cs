@@ -14,7 +14,7 @@ public class RoomChange : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Room")
+        if(other.CompareTag("Room"))
         {
             currentRoom.GetComponent<RoomController>().ExitRoom();
             other.GetComponent<RoomController>().EnterRoom();

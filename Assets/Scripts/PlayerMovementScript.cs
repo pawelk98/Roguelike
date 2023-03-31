@@ -4,6 +4,7 @@ public class PlayerMovementScript : MonoBehaviour
 {
     public Rigidbody playerRb;
     public Animator animator;
+    public PlayerCombat playerCombat;
 
     public float speed = 10;
     public float dodgeSpeed = 30;
@@ -16,11 +17,11 @@ public class PlayerMovementScript : MonoBehaviour
     float dodgeEnd;
     Vector3 dodgeDirection;
 
-    bool isMoving;
-    bool isDodging;
-    bool isAttacking;
+    public bool isMoving;
+    public bool isDodging;
+    public bool isAttacking;
+    public bool hadEffect;
     GameObject chestInRange;
-
 
     void Update()
     {
@@ -91,11 +92,16 @@ public class PlayerMovementScript : MonoBehaviour
             animator.SetFloat("Attack_Melee", attackSpeed);
             isAttacking = true;
         }
-
-        if (isAttacking && Time.time - attackStart >= 1 / attackSpeed)
+        else if (isAttacking && Time.time - attackStart >= 1 / attackSpeed)
         {
             animator.SetFloat("Attack_Melee", 0);
             isAttacking = false;
+            hadEffect = false;
+        }
+        else if (isAttacking && !hadEffect && Time.time - attackStart >= 1 / attackSpeed / 2)
+        {
+            playerCombat.Attack();
+            hadEffect = true;
         }
     }
 

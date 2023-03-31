@@ -10,7 +10,6 @@ public class PlayerSpawn : MonoBehaviour
     public void SpawnPlayer(GameObject startingRoom)
     {
         GameObject newPlayer = Instantiate(player, startingRoom.transform.position, Quaternion.identity);
-        startingRoom.GetComponent<RoomController>().EnterRoom();
         newPlayer.GetComponent<RoomChange>().SetCurrentRoom(startingRoom);
 
         cameraMovement.SetPlayer(newPlayer.transform);
