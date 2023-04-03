@@ -21,9 +21,11 @@ public class LevelGenerator : MonoBehaviour
     public int offTrackDoorChance;
     public int treasureRoomChance;
     public Vector2 offset;
+
     public GameObject roomPrefab;
     public PlayerSpawn playerSpawn;
     public NavMeshSurface navMeshSurface;
+    public RoomGenerator roomGenerator;
 
     List<Cell> board;
 
@@ -53,28 +55,21 @@ public class LevelGenerator : MonoBehaviour
                         }
                     }
 
-
-                    GameObject room = Instantiate(roomPrefab, new Vector3(x * offset.x, 0, y * offset.y), Quaternion.identity, transform);
-                    RoomController roomController = room.GetComponent<RoomController>();
-                    roomController.SetConnections(board[cellID].status);  //set primary path
-                    room.name = "Room x:" + x + " y:" + y;
-
                     if (cellID == mazeStart)
                     {
-                        roomController.InitializeRoom(RoomController.RoomType.Start);
-                        startingRoom = room;
+                        startingRoom = roomGenerator.GenerateRoom(RoomGenerator.RoomType.Start, new Vector3(x * offset.x, 0, y * offset.y), board[cellID].status);
                     }
                     else if(cellID == mazeEnd)
                     {
-                        roomController.InitializeRoom(RoomController.RoomType.Boss);
+                        roomGenerator.GenerateRoom(RoomGenerator.RoomType.Boss, new Vector3(x * offset.x, 0, y * offset.y), board[cellID].status);
                     }
                     else if(Random.Range(0,99) < treasureRoomChance)
                     {
-                        roomController.InitializeRoom(RoomController.RoomType.Treasure);
+                        roomGenerator.GenerateRoom(RoomGenerator.RoomType.Treasure, new Vector3(x * offset.x, 0, y * offset.y), board[cellID].status);
                     }
                     else
                     {
-                        roomController.InitializeRoom(RoomController.RoomType.Default);
+                        roomGenerator.GenerateRoom(RoomGenerator.RoomType.Default, new Vector3(x * offset.x, 0, y * offset.y), board[cellID].status);
                     }
                 }
             }

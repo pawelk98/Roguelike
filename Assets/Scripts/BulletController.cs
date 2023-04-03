@@ -28,7 +28,11 @@ public class BulletController : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             if(other.gameObject.GetComponent<PlayerCombat>().DealRangedDamage(damage))
-                Destroy(this.gameObject);
+                Destroy(gameObject);
+        }
+        else if(other.CompareTag("Environment"))
+        {
+            Destroy(gameObject);
         }
     }
 }

@@ -1,37 +1,42 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class RoomController : MonoBehaviour
 {
-    public enum RoomType { Default, Start, Boss, Treasure }
+    public float obstacleChance;
     public GameObject[] doors;
-    public GameObject roomAssets;
-    public Transform roomAssetsTransform;
     public BoxCollider boxCollider;
     public bool roomClear = false;
-    public RoomType roomType;
-    public GameObject startInterior;
-    public List<GameObject> defaultInteriors;
-    bool[] entrances;
+    public RoomGenerator.RoomType roomType;
     public MeshRenderer[] meshRenderers;
+    public Transform interior;
+    public Transform obstacles;
+    bool[] entrances;
 
-    void Awake()
+    private void Awake()
     {
         entrances = new bool[4];
+        SetObstacles();
+        RotateInterior();
     }
-
     void Start()
     {
-        meshRenderers = roomAssets.GetComponentsInChildren<MeshRenderer>();
+
+        meshRenderers = GetComponentsInChildren<MeshRenderer>();
         if(RoomChange.currentRoom != this.gameObject)
             SetMeshRenderersState(meshRenderers, false);
+
+        if (roomType == RoomGenerator.RoomType.Start)
+            RoomClear();
+
+        boxCollider.enabled = true;
     }
 
     void Update()
     {
         if (Input.GetKey("q") && RoomChange.currentRoom == gameObject)
             RoomClear();
-
     }
 
     public void SetConnections(bool[] status)
@@ -42,27 +47,6 @@ public class RoomController : MonoBehaviour
             if (status[i])
                 doors[i].SetActive(false);
         }
-    }
-
-    public void InitializeRoom(RoomType roomType)
-    {
-        this.roomType = roomType;
-        GameObject interior;
-        switch (roomType)
-        {
-            case RoomType.Start:
-                interior = Instantiate(startInterior, roomAssetsTransform);
-                roomClear = true;
-                break;
-            case RoomType.Default:
-                interior = Instantiate(defaultInteriors[Random.Range(0, defaultInteriors.Count - 1)], roomAssetsTransform);
-                break;
-            default:
-                interior = Instantiate(startInterior, roomAssetsTransform);
-                break;
-        }
-
-        boxCollider.enabled = true;
     }
 
     public void EnterRoom()
@@ -93,5 +77,21 @@ public class RoomController : MonoBehaviour
     {
         foreach (MeshRenderer r in renderers)
             r.enabled = state;
+    }
+
+    void RotateInterior()
+    {
+        float[] degrees = { 0, 90, 180, 270 };
+
+        interior.eulerAngles = new Vector3(0, degrees[Random.Range(0, 4)], 0);
+    }
+
+    void SetObstacles()
+    {
+        foreach (Transform t in obstacles)
+        {
+            if (Random.Range(0, 100) > obstacleChance)
+                t.gameObject.SetActive(false);
+        }
     }
 }

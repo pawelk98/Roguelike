@@ -12,6 +12,7 @@ public class EnemyController : MonoBehaviour
     public float attackDamage;
     public float attackSpeed;
     public float bulletSpeed;
+    public float mass;
     public bool isRanged;
     float lastAttack;
 
@@ -29,6 +30,7 @@ public class EnemyController : MonoBehaviour
     public Animator animator;
     public GameObject bulletPrefab;
     public Transform bulletOrigin;
+    public Rigidbody rigidBody;
     public LayerMask layerMask;
     GameObject player;
     PlayerCombat playerCombat;
@@ -55,14 +57,15 @@ public class EnemyController : MonoBehaviour
                 RaycastHit hit;
                 Physics.Raycast(transform.position, towardsPlayer, out hit, attackRange, layerMask);
 
-                if(isAttacking || hit.collider != null && hit.collider.CompareTag("Player"))
+                if (isAttacking || hit.collider != null && hit.collider.CompareTag("Player"))
                 {
                     Attack();
                 }
-                else if(!isAttacking)
+                else if (!isAttacking)
                 {
                     Move();
                 }
+
             }
         }
         else
@@ -154,12 +157,13 @@ public class EnemyController : MonoBehaviour
     public void DealDamage(float damage)
     {
         currentHealth -= damage;
-        isAlive();
+        IsAlive();
     }
 
-    void isAlive()
+    void IsAlive()
     {
         if (currentHealth <= 0)
             Destroy(this.gameObject);
     }
+
 }

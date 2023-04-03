@@ -9,6 +9,8 @@ TagManager:
   - Enemy
   - AttackCollider
   - Bullet
+  - Environment
+  - Destroyable
   layers:
   - Default
   - TransparentFX
@@ -18,7 +20,7 @@ TagManager:
   - UI
   - Enemy
   - Bullet
-  - 
+  - Environment
   - 
   - 
   - 
