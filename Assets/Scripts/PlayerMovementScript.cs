@@ -11,6 +11,7 @@ public class PlayerMovementScript : MonoBehaviour
     public float dodgeDuration = 0.1f;
     public float dodgeCooldown = 2;
     public float attackSpeed = 1f;
+    public float maxAttackDirectionInputTime = 0.2f;
 
     float attackStart;
     float dodgeStart;
@@ -25,20 +26,29 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Update()
     {
-        Vector3 inputDirection = Vector3.zero;
+        Vector3 moveInput = Vector3.zero;
+        if (Input.GetKey("w"))
+            moveInput.z += 1;
+        if (Input.GetKey("s"))
+            moveInput.z -= 1;
+        if ( Input.GetKey("d"))
+            moveInput.x += 1;
+        if (Input.GetKey("a"))
+            moveInput.x -= 1;
 
-        if (Input.GetKey("up") || Input.GetKey("w"))
-            inputDirection.z += 1;
-        if (Input.GetKey("down") || Input.GetKey("s"))
-            inputDirection.z -= 1;
-        if (Input.GetKey("right") || Input.GetKey("d"))
-            inputDirection.x += 1;
-        if (Input.GetKey("left") || Input.GetKey("a"))
-            inputDirection.x -= 1;
+        Vector3 attackInput = Vector3.zero;
+        if (Input.GetKey("up"))
+            attackInput.z += 1;
+        if (Input.GetKey("down"))
+            attackInput.z -= 1;
+        if (Input.GetKey("right"))
+            attackInput.x += 1;
+        if (Input.GetKey("left"))
+            attackInput.x -= 1;
 
-        Move(inputDirection);
-        Dodge(inputDirection);
-        Attack(inputDirection);
+        Move(moveInput);
+        Dodge(moveInput);
+        Attack(attackInput);
         Interact();
     }
 
@@ -86,7 +96,7 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Attack(Vector3 inputDirection)
     {
-        if (Input.GetKeyDown("c") && !isDodging && !isAttacking)
+        if (inputDirection.magnitude > 0 && !isDodging && !isAttacking)
         {
             attackStart = Time.time;
             animator.SetFloat("Attack_Melee", attackSpeed);
@@ -103,6 +113,9 @@ public class PlayerMovementScript : MonoBehaviour
             playerCombat.Attack();
             hadEffect = true;
         }
+        else if (isAttacking && Time.time - attackStart <= maxAttackDirectionInputTime)
+            transform.LookAt(playerRb.position + inputDirection);
+
     }
 
     void Interact()
