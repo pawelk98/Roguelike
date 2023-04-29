@@ -163,7 +163,15 @@ public class EnemyController : MonoBehaviour
     void IsAlive()
     {
         if (currentHealth <= 0)
-            Destroy(this.gameObject);
+        {
+            RoomChange.currentRoom.GetComponent<RoomController>().KillEnemy(gameObject);
+            Destroy(gameObject);
+        }
+    }
+
+    public void Alert()
+    {
+        isAlerted = true;
     }
 
 }

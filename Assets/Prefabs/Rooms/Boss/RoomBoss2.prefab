@@ -236,6 +236,20 @@ MonoBehaviour:
   meshRenderers: []
   interior: {fileID: 4342196088307429002}
   obstacles: {fileID: 0}
+  spawners: []
+  enemies: []
+  torchLocations: []
+  torch: {fileID: 0}
+  timeBetweenWaves: 0
+  enemySpawnChance: 0
+  wavesRangeMin: 0
+  wavesRangeMax: 0
+  torchesCountRangeMin: 0
+  torchesCountRangeMax: 0
+  survivalTimeRangeMin: 0
+  survivalTimeRangeMax: 0
+  minConcurrentEnemies: 0
+  maxConcurrentEnemies: 0
 --- !u!65 &5590653231110299877
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -971,6 +985,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7982149296790930380}
     m_Modifications:
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.030169325
+      objectReference: {fileID: 0}
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.012740005
+      objectReference: {fileID: 0}
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.x
+      value: 0.028601456
+      objectReference: {fileID: 0}
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.y
+      value: -0.000000014232095
+      objectReference: {fileID: 0}
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.z
+      value: 0.003529865
+      objectReference: {fileID: 0}
     - target: {fileID: 3580515688999647229, guid: f089ea3a02cf87445897d769560f9d44,
         type: 3}
       propertyPath: m_RootOrder
@@ -1031,6 +1070,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: Doorwall lvl2 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.029692516
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.012035414
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.x
+      value: -0.02923629
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.y
+      value: -0.000000014232095
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.z
+      value: 0.0038821572
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f089ea3a02cf87445897d769560f9d44, type: 3}
 --- !u!4 &220808100903291345 stripped
@@ -1046,6 +1110,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7982149296790930380}
     m_Modifications:
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.030169325
+      objectReference: {fileID: 0}
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.014107179
+      objectReference: {fileID: 0}
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.x
+      value: 0.028601458
+      objectReference: {fileID: 0}
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.y
+      value: -0.0000000142320955
+      objectReference: {fileID: 0}
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.z
+      value: -0.0028462529
+      objectReference: {fileID: 0}
     - target: {fileID: 3580515688999647229, guid: f089ea3a02cf87445897d769560f9d44,
         type: 3}
       propertyPath: m_RootOrder
@@ -1105,6 +1194,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Doorwall lvl2 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.029692516
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.01364916
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.x
+      value: -0.029236292
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.y
+      value: -0.0000000142320955
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.z
+      value: -0.0030752579
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f089ea3a02cf87445897d769560f9d44, type: 3}
@@ -1346,6 +1460,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7982149296790930380}
     m_Modifications:
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.030169325
+      objectReference: {fileID: 0}
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.013900825
+      objectReference: {fileID: 0}
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.y
+      value: -0.0000000142320955
+      objectReference: {fileID: 0}
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.z
+      value: -0.0029494348
+      objectReference: {fileID: 0}
     - target: {fileID: 3580515688999647229, guid: f089ea3a02cf87445897d769560f9d44,
         type: 3}
       propertyPath: m_RootOrder
@@ -1405,6 +1539,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Doorwall lvl2 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.029692516
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.01281411
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.y
+      value: -0.0000000142320955
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.z
+      value: -0.003492793
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f089ea3a02cf87445897d769560f9d44, type: 3}
@@ -2339,6 +2493,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7982149296790930380}
     m_Modifications:
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.030169325
+      objectReference: {fileID: 0}
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.01360547
+      objectReference: {fileID: 0}
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.y
+      value: -0.000000014232095
+      objectReference: {fileID: 0}
+    - target: {fileID: 1553156599771365061, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.z
+      value: 0.0030971325
+      objectReference: {fileID: 0}
     - target: {fileID: 3580515688999647229, guid: f089ea3a02cf87445897d769560f9d44,
         type: 3}
       propertyPath: m_RootOrder
@@ -2398,6 +2572,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Doorwall lvl2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.029692516
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.013521906
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.y
+      value: -0.000000014232095
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017496961523884201, guid: f089ea3a02cf87445897d769560f9d44,
+        type: 3}
+      propertyPath: m_Center.z
+      value: 0.003138913
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f089ea3a02cf87445897d769560f9d44, type: 3}

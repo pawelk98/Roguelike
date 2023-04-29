@@ -23,6 +23,7 @@ public class PlayerMovementScript : MonoBehaviour
     public bool isAttacking;
     public bool hadEffect;
     GameObject chestInRange;
+    GameObject torchInRange;
 
     void Update()
     {
@@ -72,7 +73,7 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Dodge(Vector3 inputDirection)
     {
-        if (Input.GetKeyDown("z") && isMoving && !isDodging && Time.time - dodgeEnd >= dodgeCooldown)
+        if (Input.GetKeyDown("space") && isMoving && !isDodging && Time.time - dodgeEnd >= dodgeCooldown)
         {
             dodgeStart = Time.time;
             dodgeDirection = inputDirection.normalized * dodgeSpeed;
@@ -120,12 +121,12 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Interact()
     {
-        if(Input.GetKeyDown("v"))
+        if(Input.GetKeyDown("e"))
         {
-            if(chestInRange != null)
-            {
+            if (chestInRange != null)
                 chestInRange.GetComponent<ChestController>().Open();
-            }
+            else if (torchInRange != null)
+                torchInRange.GetComponent<TorchController>().Activate();
         }
     }
 
@@ -133,13 +134,15 @@ public class PlayerMovementScript : MonoBehaviour
     {
         if(other.gameObject.tag == "Chest")
             chestInRange = other.gameObject;
-        else if (isAttacking && other.gameObject.tag == "Enemy")
-            Debug.Log("You hit an enemy");
+        else if (other.gameObject.tag == "Torch")
+            torchInRange = other.gameObject;
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject == chestInRange)
             chestInRange = null;
+        else if (other.gameObject == torchInRange)
+            torchInRange = null;
     }
 }

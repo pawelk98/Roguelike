@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 public class RoomController : MonoBehaviour
@@ -12,7 +13,34 @@ public class RoomController : MonoBehaviour
     public MeshRenderer[] meshRenderers;
     public Transform interior;
     public Transform obstacles;
+    public Transform[] spawners;
+    public GameObject[] enemies;
+    public Transform[] torchLocations;
+    public GameObject torch;
+    public float timeBetweenWaves;
+    public int enemySpawnChance;
+    public int wavesRangeMin;
+    public int wavesRangeMax;
+    public int torchesCountRangeMin;
+    public int torchesCountRangeMax;
+    public float survivalTimeRangeMin;
+    public float survivalTimeRangeMax;
+    public int minConcurrentEnemies;
+    public int maxConcurrentEnemies;
+
     bool[] entrances;
+    int roomGoal;
+    bool isGoalActive;
+    List<GameObject> aliveEnemies;
+    float lastWaveTime = -100;
+    int wavesCount;
+    int currentWave = 0;
+    int concurrentEnemies;
+    float roomEnterTime;
+    float survivalTime;
+    List<GameObject> torches;
+    int torchesCount;
+
 
     private void Awake()
     {
@@ -22,21 +50,67 @@ public class RoomController : MonoBehaviour
     }
     void Start()
     {
-
-        meshRenderers = GetComponentsInChildren<MeshRenderer>();
-        if(RoomChange.currentRoom != this.gameObject)
-            SetMeshRenderersState(meshRenderers, false);
-
         if (roomType == RoomGenerator.RoomType.Start)
             RoomClear();
 
         boxCollider.enabled = true;
+
+        if (roomType == RoomGenerator.RoomType.Default)
+        {
+            roomGoal = 2;
+            //roomGoal = Random.Range(0, 3);
+        }
+
+        aliveEnemies = new List<GameObject>();
+        wavesCount = Random.Range(wavesRangeMin, wavesRangeMax + 1);
+        concurrentEnemies = Random.Range(minConcurrentEnemies, maxConcurrentEnemies + 1);
+        survivalTime = Random.Range(survivalTimeRangeMin, survivalTimeRangeMax);
+        torches= new List<GameObject>();
+        torchesCount = Random.Range(torchesCountRangeMin, torchesCountRangeMax + 1);
+        concurrentEnemies = Random.Range(minConcurrentEnemies, maxConcurrentEnemies + 1);
+
+        if(roomGoal == 2)
+        {
+            List<int> torchPlacement = new List<int>();
+            for(int i = 0; i < torchesCount; i++)
+            {
+                int n;
+                do {
+                    n = Random.Range(0, torchLocations.Length);
+                } while (torchPlacement.Contains(n));
+
+                torchPlacement.Add(n);
+                torches.Add(Instantiate(torch, torchLocations[n]));
+            }
+        }
+
+        meshRenderers = GetComponentsInChildren<MeshRenderer>();
+        if (RoomChange.currentRoom != this.gameObject)
+            SetMeshRenderersState(meshRenderers, false);
     }
 
     void Update()
     {
         if (Input.GetKey("q") && RoomChange.currentRoom == gameObject)
             RoomClear();
+
+        if (isGoalActive)
+        {
+            switch (roomGoal) {
+                case 0:
+                    WavesGoalScenario();
+                    break;
+                case 1:
+                    SurvivalGoalScenario();
+                    break;
+                case 2:
+                    TorchGoalScenario();
+                    break;
+                default:
+                    WavesGoalScenario();
+                    break;
+            }
+        }
     }
 
     public void SetConnections(bool[] status)
@@ -55,10 +129,15 @@ public class RoomController : MonoBehaviour
         SetMeshRenderersState(meshRenderers, true);
 
         if (!roomClear)
+        {
             foreach (GameObject d in doors)
                 d.SetActive(true);
+
+            roomEnterTime = Time.time;
+            isGoalActive = true;
+        }
     }
-    
+
     public void ExitRoom()
     {
         boxCollider.enabled = true;
@@ -67,7 +146,7 @@ public class RoomController : MonoBehaviour
 
     public void RoomClear()
     {
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
             if (entrances[i])
                 doors[i].SetActive(false);
         roomClear = true;
@@ -93,5 +172,61 @@ public class RoomController : MonoBehaviour
             if (Random.Range(0, 100) > obstacleChance)
                 t.gameObject.SetActive(false);
         }
+    }
+    public void KillEnemy(GameObject enemy)
+    {
+        if(aliveEnemies.Contains(enemy))
+            aliveEnemies.Remove(enemy);
+    }
+
+    void WavesGoalScenario()
+    {
+        if (currentWave < wavesCount && Time.time - lastWaveTime >= timeBetweenWaves)
+        {
+            foreach(Transform s in spawners)
+            {
+                if (Random.Range(0, 100) <= enemySpawnChance)
+                    aliveEnemies.Add(Instantiate(enemies[0], s));
+            }
+
+            lastWaveTime = Time.time;
+            currentWave++;
+        }
+        else if (!roomClear && aliveEnemies.Count == 0)
+            RoomClear();
+    }
+    
+    void SurvivalGoalScenario()
+    {
+        if (Time.time - roomEnterTime <= survivalTime)
+        {
+            if (aliveEnemies.Count < concurrentEnemies)
+            {
+                aliveEnemies.Add(Instantiate(enemies[0], spawners[Random.Range(0, spawners.Length)]));
+                aliveEnemies[aliveEnemies.Count - 1].GetComponent<EnemyController>().Alert();
+            }
+        }
+        else if (!roomClear && aliveEnemies.Count == 0)
+            RoomClear();
+    }
+
+    void TorchGoalScenario()
+    {
+        bool allTorchesLit = true;
+
+        if(!roomClear)
+        {
+            foreach (GameObject t in torches)
+                if (!t.GetComponent<TorchController>().IsActivated())
+                    allTorchesLit = false;
+        }
+
+        if (!allTorchesLit)
+        {
+            if (aliveEnemies.Count < concurrentEnemies)
+                aliveEnemies.Add(Instantiate(enemies[0], spawners[Random.Range(0, spawners.Length)]));
+        }
+        else if (!roomClear && aliveEnemies.Count == 0)
+            RoomClear();
     }
 }

@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 3219527627179062267}
   - component: {fileID: 2128994744258484079}
   - component: {fileID: 1743076743607041790}
+  - component: {fileID: 5764163779847775670}
+  - component: {fileID: 2132480640227382065}
   m_Layer: 8
   m_Name: torture 15
   m_TagString: Environment
@@ -95,5 +97,31 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 6.1409893, y: 4.748953, z: 5.9341373}
-  m_Center: {x: -0.41819346, y: 2.3744764, z: -0.51972044}
+  m_Size: {x: 5.1902833, y: 4.748953, z: 4.695494}
+  m_Center: {x: 0.057159662, y: 2.3744764, z: 0.09960103}
+--- !u!65 &5764163779847775670
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8849308781757880714}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.9835019, y: 3.8690794, z: 1.1463928}
+  m_Center: {x: -2.996937, y: 1.9345397, z: 0.8122711}
+--- !u!65 &2132480640227382065
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8849308781757880714}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3358469, y: 4.569424, z: 1.5564685}
+  m_Center: {x: 0.11044645, y: 2.284712, z: -2.708555}

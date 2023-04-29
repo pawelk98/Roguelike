@@ -11,6 +11,7 @@ TagManager:
   - Bullet
   - Environment
   - Destroyable
+  - Torch
   layers:
   - Default
   - TransparentFX
