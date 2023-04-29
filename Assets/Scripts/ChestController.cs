@@ -28,7 +28,7 @@ public class ChestController : MonoBehaviour
             PlayerInventory.coins += coins;
             OpenChestModel();
             state = true;
-            Debug.Log("Opening chest " + PlayerInventory.coins + " total coins");
+            UIController.Instance.SetCoins(PlayerInventory.coins);
         }
     }
 

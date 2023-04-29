@@ -15,7 +15,7 @@ public class PlayerCombat : MonoBehaviour
 
     void Start()
     {
-
+        UIController.Instance.SetHealth((int)currentHealth);
     }
 
     void Update()
@@ -28,6 +28,7 @@ public class PlayerCombat : MonoBehaviour
         if (!playerMovementScript.isDodging)
         {
             currentHealth -= damage;
+            UIController.Instance.SetHealth((int)currentHealth);
             isAlive();
             return true;
         }
@@ -39,6 +40,7 @@ public class PlayerCombat : MonoBehaviour
         if(!playerMovementScript.isDodging)
         {
             currentHealth -= damage;
+            UIController.Instance.SetHealth((int)currentHealth);
             isAlive();
             return true;
         }
@@ -48,7 +50,7 @@ public class PlayerCombat : MonoBehaviour
     void isAlive()
     {
         if (currentHealth <= 0)
-            Debug.Log("YOU DIED");
+            UIController.Instance.SetHealth(0);
     }
 
     public void Heal(float ammount)
@@ -57,6 +59,8 @@ public class PlayerCombat : MonoBehaviour
 
         if (currentHealth > health)
             currentHealth = health;
+
+        UIController.Instance.SetHealth((int)currentHealth);
     }
 
     public void Attack()

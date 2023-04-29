@@ -40,6 +40,8 @@ public class EnemyController : MonoBehaviour
         player = GameObject.Find("Player");
         if (player)
             playerCombat = player.GetComponent<PlayerCombat>();
+
+        UIController.Instance.AddEnemy();
     }
 
     void Update()
@@ -164,6 +166,7 @@ public class EnemyController : MonoBehaviour
     {
         if (currentHealth <= 0)
         {
+            UIController.Instance.RemoveEnemy();
             RoomChange.currentRoom.GetComponent<RoomController>().KillEnemy(gameObject);
             Destroy(gameObject);
         }
