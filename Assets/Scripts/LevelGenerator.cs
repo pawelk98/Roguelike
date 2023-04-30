@@ -22,7 +22,6 @@ public class LevelGenerator : MonoBehaviour
     public int treasureRoomChance;
     public Vector2 offset;
 
-    public GameObject roomPrefab;
     public PlayerSpawn playerSpawn;
     public NavMeshSurface navMeshSurface;
     public RoomGenerator roomGenerator;

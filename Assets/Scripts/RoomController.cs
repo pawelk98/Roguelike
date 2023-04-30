@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class RoomController : MonoBehaviour
 {
@@ -106,7 +107,7 @@ public class RoomController : MonoBehaviour
     void Update()
     {
         if (Input.GetKey("q") && RoomChange.currentRoom == gameObject)
-            RoomClear();
+            KillAllEnemies();
 
         if (isGoalActive)
         {
@@ -201,9 +202,9 @@ public class RoomController : MonoBehaviour
         {
             UIController.Instance.SetGoalProgress((currentWave + 1).ToString() + " / " + wavesCount.ToString());
 
-            for(int i = 0; i < concurrentEnemies; i++)
-                aliveEnemies.Add(Instantiate(enemies[0], spawnerPos[UnityEngine.Random.Range(0, spawnerPos.Count)]));
-
+            for (int i = 0; i < concurrentEnemies; i++)
+                SpawnEnemy();
+                
             currentWave++;
         }
         else if (!roomClear && aliveEnemies.Count == 0)
@@ -223,8 +224,7 @@ public class RoomController : MonoBehaviour
 
             if (Time.time - lastSpawnTime >= timeBetweenSpawn)
             {
-                aliveEnemies.Add(Instantiate(enemies[0], spawnerPos[UnityEngine.Random.Range(0, spawnerPos.Count)]));
-                aliveEnemies[aliveEnemies.Count - 1].GetComponent<EnemyController>().Alert();
+                SpawnEnemy(true);
                 lastSpawnTime = Time.time;
             }
         }
@@ -254,13 +254,31 @@ public class RoomController : MonoBehaviour
         if (!allTorchesLit)
         {
             if (aliveEnemies.Count < concurrentEnemies)
-                aliveEnemies.Add(Instantiate(enemies[0], spawnerPos[UnityEngine.Random.Range(0, spawnerPos.Count)]));
+                SpawnEnemy();
         }
         else if (!roomClear && aliveEnemies.Count == 0)
         {
             UIController.Instance.SetGoalProgress("");
             UIController.Instance.SetGoal(5);
             RoomClear();
+        }
+    }
+
+    void SpawnEnemy(bool alert = false)
+    {
+        GameObject instantiatedEnemy = Instantiate(enemies[UnityEngine.Random.Range(0,enemies.Length)], spawnerPos[UnityEngine.Random.Range(0, spawnerPos.Count)]);
+        instantiatedEnemy.GetComponent<NavMeshAgent>().enabled = true;
+
+        if (alert)
+            instantiatedEnemy.GetComponent<EnemyController>().Alert();
+
+        aliveEnemies.Add(instantiatedEnemy);
+    }
+
+    public void KillAllEnemies()
+    {
+        foreach(GameObject enemy in aliveEnemies) {
+            enemy.GetComponent<EnemyController>().DealDamage(1000);
         }
     }
 }

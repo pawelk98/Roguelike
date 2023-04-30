@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerMovementScript : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class PlayerMovementScript : MonoBehaviour
     public float dodgeDuration = 0.1f;
     public float dodgeCooldown = 2;
     public float attackSpeed = 1f;
+    public float attackCooldown = 1f;
     public float maxAttackDirectionInputTime = 0.2f;
 
     float attackStart;
@@ -73,10 +75,14 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Dodge(Vector3 inputDirection)
     {
-        if (Input.GetKeyDown("space") && isMoving && !isDodging && Time.time - dodgeEnd >= dodgeCooldown)
+        if (Input.GetKeyDown("space") && !isDodging && Time.time - dodgeEnd >= dodgeCooldown)
         {
             dodgeStart = Time.time;
-            dodgeDirection = inputDirection.normalized * dodgeSpeed;
+            if (inputDirection.magnitude > 0)
+                dodgeDirection = inputDirection.normalized * dodgeSpeed;
+            else
+                dodgeDirection = transform.forward * dodgeSpeed;
+
             animator.SetFloat("Dodging", 1 / dodgeDuration);
             isDodging = true;
         }
@@ -97,7 +103,7 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Attack(Vector3 inputDirection)
     {
-        if (inputDirection.magnitude > 0 && !isDodging && !isAttacking)
+        if (inputDirection.magnitude > 0 && !isDodging && !isAttacking && Time.time - attackStart >= attackCooldown)
         {
             attackStart = Time.time;
             animator.SetFloat("Attack_Melee", attackSpeed);

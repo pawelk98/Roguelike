@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8477856746232671432}
   - component: {fileID: 577908506020481298}
   - component: {fileID: 9216063024534745381}
+  - component: {fileID: 3219064910813311926}
   m_Layer: 8
   m_Name: railingCorner
   m_TagString: Environment
@@ -95,5 +96,18 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 64.77907, y: 2.04, z: 31.75487}
-  m_Center: {x: -32.38939, y: 0.96856356, z: 15.713811}
+  m_Size: {x: 64.77906, y: 2.04, z: 2.140452}
+  m_Center: {x: -32.389393, y: 0.96856356, z: 0.9066013}
+--- !u!65 &3219064910813311926
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3457844552067336085}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.5763013, y: 2.04, z: 31.754871}
+  m_Center: {x: -1.2880073, y: 0.96856356, z: 15.713811}

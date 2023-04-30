@@ -385,7 +385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b157e06e749eb154bb20c2453586162b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstacleChance: 70
+  obstacleChance: 50
   doors:
   - {fileID: 5729379658695064646}
   - {fileID: 6497554736749304986}
@@ -397,16 +397,15 @@ MonoBehaviour:
   meshRenderers: []
   interior: {fileID: 1890305042012112677}
   obstacles: {fileID: 5163683557620771515}
-  spawners: []
+  spawners: {fileID: 0}
+  torches: {fileID: 0}
   enemies: []
-  torchLocations: []
   torch: {fileID: 0}
-  timeBetweenWaves: 0
-  enemySpawnChance: 0
   wavesRangeMin: 0
   wavesRangeMax: 0
   torchesCountRangeMin: 0
   torchesCountRangeMax: 0
+  timeBetweenSpawn: 0
   survivalTimeRangeMin: 0
   survivalTimeRangeMax: 0
   minConcurrentEnemies: 0

@@ -410,7 +410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b157e06e749eb154bb20c2453586162b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstacleChance: 70
+  obstacleChance: 50
   doors:
   - {fileID: 6209153089415376491}
   - {fileID: 9031607969477311943}

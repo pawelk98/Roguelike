@@ -46,9 +46,6 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
-        if (!agent.enabled && LevelGenerator.generated)
-            agent.enabled = true;
-
         if(player != null)
         {
             towardsPlayer = player.transform.position - transform.position;
