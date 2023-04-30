@@ -15,14 +15,15 @@ public class UIController : MonoBehaviour
     public GameObject survivalImg;
     public GameObject torchesImg;
     public GameObject clearedImg;
-    public GameObject startImg;
     public GameObject treasureImg;
     public GameObject bossImg;
+    public GameObject interaction;
 
     public TMP_Text health;
     public TMP_Text coins;
     public TMP_Text goalProgress;
     public TMP_Text enemies;
+    public TMP_Text interactionTip;
 
     int enemyCount = 0;
 
@@ -64,13 +65,23 @@ public class UIController : MonoBehaviour
         goalProgress.text = text;
     }
 
+    public void SetInteractionTip(string text)
+    {
+        interactionTip.text = "(E) " + text;
+        interaction.SetActive(true);
+    }
+
+    public void RemoveInteractionTip()
+    {
+        interaction.SetActive(false);
+    }
+
     public void SetGoal(int goalId)
     {
         wavesImg.SetActive(false);
         survivalImg.SetActive(false);
         torchesImg.SetActive(false);
         clearedImg.SetActive(false);
-        startImg.SetActive(false);
         treasureImg.SetActive(false);
         bossImg.SetActive(false);
 
@@ -93,9 +104,6 @@ public class UIController : MonoBehaviour
                 break;
             case 5:
                 clearedImg.SetActive(true);
-                break;
-            case 6:
-                startImg.SetActive(true);
                 break;
             default:
                 break;

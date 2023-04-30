@@ -133,16 +133,28 @@ public class PlayerMovementScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Chest")
+        {
             chestInRange = other.gameObject;
+            UIController.Instance.SetInteractionTip("open");
+        }
         else if (other.gameObject.tag == "Torch")
+        {
             torchInRange = other.gameObject;
+            UIController.Instance.SetInteractionTip("light");
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject == chestInRange)
+        {
             chestInRange = null;
+            UIController.Instance.RemoveInteractionTip();
+        }
         else if (other.gameObject == torchInRange)
+        {
             torchInRange = null;
+            UIController.Instance.RemoveInteractionTip();
+        }
     }
 }

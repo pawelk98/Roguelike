@@ -113,8 +113,8 @@ Transform:
   m_GameObject: {fileID: 3073903518588532459}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: -0.7071068}
   m_LocalPosition: {x: 4.5572186, y: -0.0011958182, z: 8.951501}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6462788604350309570}
   - {fileID: 3152535426515869500}
@@ -210,6 +210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chestTop: {fileID: 4261724381768709103}
+  trigger: {fileID: 5715464325024455649}
   state: 0
   coinsRangeMin: 10
   coinsRangeMax: 50

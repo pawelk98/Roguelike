@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RoomController : MonoBehaviour
@@ -12,16 +13,15 @@ public class RoomController : MonoBehaviour
     public MeshRenderer[] meshRenderers;
     public Transform interior;
     public Transform obstacles;
-    public Transform[] spawners;
+    public Transform spawners;
+    public Transform torches;
     public GameObject[] enemies;
-    public Transform[] torchLocations;
     public GameObject torch;
-    public float timeBetweenWaves;
-    public int enemySpawnChance;
     public int wavesRangeMin;
     public int wavesRangeMax;
     public int torchesCountRangeMin;
     public int torchesCountRangeMax;
+    public float timeBetweenSpawn;
     public float survivalTimeRangeMin;
     public float survivalTimeRangeMax;
     public int minConcurrentEnemies;
@@ -31,14 +31,16 @@ public class RoomController : MonoBehaviour
     int roomGoal;
     bool isGoalActive;
     List<GameObject> aliveEnemies;
-    float lastWaveTime = -100;
+    float lastSpawnTime = -100;
     int wavesCount;
     int currentWave = 0;
     int concurrentEnemies;
     float roomEnterTime;
     float survivalTime;
-    List<GameObject> torches;
+    List<GameObject> generatedTorches;
     int torchesCount;
+    List<Transform> spawnerPos;
+    List<Transform> torchPos;
 
 
     private void Awake()
@@ -59,11 +61,25 @@ public class RoomController : MonoBehaviour
             roomGoal = UnityEngine.Random.Range(0, 3);
         }
 
+        spawnerPos = new List<Transform>();
+        torchPos = new List<Transform>();
+
+        if (spawners != null && torches != null)
+        {
+            foreach (Transform t in spawners)
+                if (t != spawners)
+                    spawnerPos.Add(t);
+
+            foreach (Transform t in torches)
+                if (t != torches)
+                    torchPos.Add(t);
+        }
+
         aliveEnemies = new List<GameObject>();
         wavesCount = UnityEngine.Random.Range(wavesRangeMin, wavesRangeMax + 1);
         concurrentEnemies = UnityEngine.Random.Range(minConcurrentEnemies, maxConcurrentEnemies + 1);
         survivalTime = UnityEngine.Random.Range(survivalTimeRangeMin, survivalTimeRangeMax);
-        torches= new List<GameObject>();
+        generatedTorches= new List<GameObject>();
         torchesCount = UnityEngine.Random.Range(torchesCountRangeMin, torchesCountRangeMax + 1);
         concurrentEnemies = UnityEngine.Random.Range(minConcurrentEnemies, maxConcurrentEnemies + 1);
 
@@ -74,11 +90,11 @@ public class RoomController : MonoBehaviour
             {
                 int n;
                 do {
-                    n = UnityEngine.Random.Range(0, torchLocations.Length);
+                    n = UnityEngine.Random.Range(0, torchPos.Count);
                 } while (torchPlacement.Contains(n));
 
                 torchPlacement.Add(n);
-                torches.Add(Instantiate(torch, torchLocations[n]));
+                generatedTorches.Add(Instantiate(torch, torchPos[n]));
             }
         }
 
@@ -181,17 +197,13 @@ public class RoomController : MonoBehaviour
 
     void WavesGoalScenario()
     {
-        if (currentWave < wavesCount && Time.time - lastWaveTime >= timeBetweenWaves)
+        if (currentWave < wavesCount && aliveEnemies.Count == 0)
         {
             UIController.Instance.SetGoalProgress((currentWave + 1).ToString() + " / " + wavesCount.ToString());
 
-            foreach (Transform s in spawners)
-            {
-                if (UnityEngine.Random.Range(0, 100) <= enemySpawnChance)
-                    aliveEnemies.Add(Instantiate(enemies[0], s));
-            }
+            for(int i = 0; i < concurrentEnemies; i++)
+                aliveEnemies.Add(Instantiate(enemies[0], spawnerPos[UnityEngine.Random.Range(0, spawnerPos.Count)]));
 
-            lastWaveTime = Time.time;
             currentWave++;
         }
         else if (!roomClear && aliveEnemies.Count == 0)
@@ -209,10 +221,11 @@ public class RoomController : MonoBehaviour
             TimeSpan timeSpan = TimeSpan.FromSeconds(survivalTime - Time.time + roomEnterTime);
             UIController.Instance.SetGoalProgress(timeSpan.Minutes + ":" + timeSpan.Seconds);
 
-            if (aliveEnemies.Count < concurrentEnemies)
+            if (Time.time - lastSpawnTime >= timeBetweenSpawn)
             {
-                aliveEnemies.Add(Instantiate(enemies[0], spawners[UnityEngine.Random.Range(0, spawners.Length)]));
+                aliveEnemies.Add(Instantiate(enemies[0], spawnerPos[UnityEngine.Random.Range(0, spawnerPos.Count)]));
                 aliveEnemies[aliveEnemies.Count - 1].GetComponent<EnemyController>().Alert();
+                lastSpawnTime = Time.time;
             }
         }
         else if (!roomClear && aliveEnemies.Count == 0)
@@ -229,7 +242,7 @@ public class RoomController : MonoBehaviour
         int torchesLit = 0;
         if(!roomClear)
         {
-            foreach (GameObject t in torches)
+            foreach (GameObject t in generatedTorches)
                 if (!t.GetComponent<TorchController>().IsActivated())
                     allTorchesLit = false;
                 else
@@ -241,7 +254,7 @@ public class RoomController : MonoBehaviour
         if (!allTorchesLit)
         {
             if (aliveEnemies.Count < concurrentEnemies)
-                aliveEnemies.Add(Instantiate(enemies[0], spawners[UnityEngine.Random.Range(0, spawners.Length)]));
+                aliveEnemies.Add(Instantiate(enemies[0], spawnerPos[UnityEngine.Random.Range(0, spawnerPos.Count)]));
         }
         else if (!roomClear && aliveEnemies.Count == 0)
         {
