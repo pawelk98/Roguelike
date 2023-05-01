@@ -28,7 +28,7 @@ public class MeleeHitboxController : MonoBehaviour
     {
         if(other.CompareTag("Enemy"))
         {
-            other.GetComponent<EnemyController>().DealDamage(damage);
+            other.GetComponent<EnemyController>().DealDamage(damage, transform);
         }
         else if(other.CompareTag("Destroyable"))
         {

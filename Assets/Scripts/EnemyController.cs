@@ -46,7 +46,7 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
-        if(player != null)
+        if (player != null)
         {
             towardsPlayer = player.transform.position - transform.position;
             if (!isAlerted)
@@ -153,10 +153,13 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void DealDamage(float damage)
+    public void DealDamage(float damage, Transform source = null)
     {
         currentHealth -= damage;
         IsAlive();
+
+        if(source != null)
+            agent.velocity = (transform.position - source.position).normalized * damage / mass;
     }
 
     void IsAlive()
@@ -173,5 +176,4 @@ public class EnemyController : MonoBehaviour
     {
         isAlerted = true;
     }
-
 }

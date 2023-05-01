@@ -583,7 +583,7 @@ MonoBehaviour:
   attackDamage: 2
   attackSpeed: 1
   bulletSpeed: 5
-  mass: 1
+  mass: 1.5
   isRanged: 0
   alertRange: 100
   scanRate: 1
