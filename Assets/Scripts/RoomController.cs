@@ -15,7 +15,6 @@ public class RoomController : MonoBehaviour
     public Transform obstacles;
     public Transform spawners;
     public Transform torches;
-    public GameObject[] enemies;
     public GameObject torch;
     public int wavesRangeMin;
     public int wavesRangeMax;
@@ -41,6 +40,8 @@ public class RoomController : MonoBehaviour
     int torchesCount;
     List<Transform> spawnerPos;
     List<Transform> torchPos;
+    GameObject[] enemies;
+    string probabilities;
 
 
     private void Awake()
@@ -58,6 +59,8 @@ public class RoomController : MonoBehaviour
 
         if (roomType == RoomGenerator.RoomType.Default)
         {
+            enemies = Enemies.Instance.GetEnemies();
+            probabilities = Enemies.Instance.GetEnemiesProbability();
             roomGoal = UnityEngine.Random.Range(0, 3);
         }
 
@@ -265,7 +268,8 @@ public class RoomController : MonoBehaviour
 
     void SpawnEnemy(bool alert = false)
     {
-        GameObject instantiatedEnemy = Instantiate(enemies[UnityEngine.Random.Range(0,enemies.Length)], spawnerPos[UnityEngine.Random.Range(0, spawnerPos.Count)]);
+        int chosenEnemy = probabilities[UnityEngine.Random.Range(0, probabilities.Length)] - '0';
+        GameObject instantiatedEnemy = Instantiate(enemies[chosenEnemy], spawnerPos[UnityEngine.Random.Range(0, spawnerPos.Count)]);
         instantiatedEnemy.GetComponent<NavMeshAgent>().enabled = true;
 
         if (alert)

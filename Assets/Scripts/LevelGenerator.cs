@@ -49,7 +49,7 @@ public class LevelGenerator : MonoBehaviour
                         List<int> neighbors = CheckNeighbors(x + y * size.x, true);
                         for (int i = 0; i < neighbors.Count; i++)
                         {
-                            if (Random.Range(0, 99) < offTrackDoorChance && neighbors[i] != mazeEnd)
+                            if (Random.Range(0, 100) <= offTrackDoorChance / 2 && neighbors[i] != mazeEnd)
                                 AddPath(cellID, neighbors[i]);
                         }
                     }
@@ -62,7 +62,7 @@ public class LevelGenerator : MonoBehaviour
                     {
                         roomGenerator.GenerateRoom(RoomGenerator.RoomType.Boss, new Vector3(x * offset.x, 0, y * offset.y), board[cellID].status);
                     }
-                    else if(Random.Range(0,99) < treasureRoomChance)
+                    else if(Random.Range(0,100) < treasureRoomChance)
                     {
                         roomGenerator.GenerateRoom(RoomGenerator.RoomType.Treasure, new Vector3(x * offset.x, 0, y * offset.y), board[cellID].status);
                     }
