@@ -1408,9 +1408,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53013f7c1488fc94d800468a1ea6f2f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletons: []
-  goblins: []
-  spiders: []
+  skeletons:
+  - {fileID: 4058906087121189518, guid: bea937e91a6a42846bcd75370518e126, type: 3}
+  goblins:
+  - {fileID: 4058906087121189518, guid: bea937e91a6a42846bcd75370518e126, type: 3}
+  spiders:
+  - {fileID: 4058906087121189518, guid: bea937e91a6a42846bcd75370518e126, type: 3}
   primaryToSecondaryRatio: 4
 --- !u!1 &1211608523
 GameObject:

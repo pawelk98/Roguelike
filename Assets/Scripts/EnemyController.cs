@@ -7,13 +7,18 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour
 {
     public float health;
-    public float currentHealth;
-    public float attackRange;
-    public float attackDamage;
+    float currentHealth;
+    public float meleeAttackRange;
+    public float rangedAttackRange;
+    public float meleeAttackDamage;
+    public float rangedAttackDamage;
     public float attackSpeed;
     public float bulletSpeed;
     public float mass;
     public bool isRanged;
+    public bool isMelee;
+    public float damageFlashDuration;
+    float damageFlashStart;
     float lastAttack;
 
     public float alertRange;
@@ -32,11 +37,17 @@ public class EnemyController : MonoBehaviour
     public Transform bulletOrigin;
     public Rigidbody rigidBody;
     public LayerMask layerMask;
+    Material baseMaterial;
+    public Material flashMaterial;
+    public List<SkinnedMeshRenderer> renderers;
     GameObject player;
     PlayerCombat playerCombat;
 
     void Start()
     {
+        baseMaterial = renderers[0].material;
+        currentHealth = health;
+
         player = GameObject.Find("Player");
         if (player)
             playerCombat = player.GetComponent<PlayerCombat>();
@@ -54,7 +65,14 @@ public class EnemyController : MonoBehaviour
             else
             {
                 RaycastHit hit;
-                Physics.Raycast(transform.position, towardsPlayer, out hit, attackRange, layerMask);
+
+                float raycastRange;
+                if (isRanged)
+                    raycastRange = rangedAttackRange;
+                else
+                    raycastRange = meleeAttackRange;
+
+                Physics.Raycast(transform.position, towardsPlayer, out hit, raycastRange, layerMask);
 
                 if (isAttacking || hit.collider != null && hit.collider.CompareTag("Player"))
                 {
@@ -74,6 +92,8 @@ public class EnemyController : MonoBehaviour
                 playerCombat = player.GetComponent<PlayerCombat>();
         }
 
+        CheckAttackEnd();
+        FlashHandler();
         animator.SetFloat("Running", agent.velocity.magnitude);
     }
 
@@ -103,52 +123,53 @@ public class EnemyController : MonoBehaviour
         agent.isStopped = true;
         transform.LookAt(player.transform);
 
-        if (!isRanged)
+        float distanceFromPlayer = towardsPlayer.magnitude;
+
+        if (isMelee && distanceFromPlayer <= meleeAttackRange)
             AttackMelee();
-        else
+        else if (isRanged && distanceFromPlayer <= rangedAttackRange)
             AttackRanged();
     }
 
     void AttackMelee()
     {
-        if(isAlerted && !isAttacking && towardsPlayer.magnitude <= attackRange)
+        if(isAlerted && !isAttacking && towardsPlayer.magnitude <= meleeAttackRange)
         {
             animator.SetFloat("Attack_Melee", attackSpeed);
             isAttacking = true;
             lastAttack = Time.time;
         }
-        else if (isAttacking && Time.time - lastAttack >= 1 / attackSpeed)
-        {
-            animator.SetFloat("Attack_Melee", 0);
-            isAttacking = false;
-            hadEffect = false;
-        }
         else if (isAttacking && !hadEffect && Time.time - lastAttack >= 1 / attackSpeed / 2)
         {
-            if (towardsPlayer.magnitude <= attackRange)
-                playerCombat.DealMeleeDamage(attackDamage);
+            if (towardsPlayer.magnitude <= meleeAttackRange)
+                playerCombat.DealMeleeDamage(meleeAttackDamage);
             hadEffect = true;
+        }
+    }
+
+    void CheckAttackEnd()
+    {
+        if (isAttacking && Time.time - lastAttack >= 1 / attackSpeed)
+        {
+            animator.SetFloat("Attack_Melee", 0);
+            animator.SetFloat("Attack_Ranged", 0);
+            isAttacking = false;
+            hadEffect = false;
         }
     }
 
     void AttackRanged()
     {
-        if (isAlerted && !isAttacking && towardsPlayer.magnitude <= attackRange)
+        if (isAlerted && !isAttacking && towardsPlayer.magnitude <= rangedAttackRange)
         {
-            animator.SetFloat("Attack_Melee", attackSpeed);
+            animator.SetFloat("Attack_Ranged", attackSpeed);
             isAttacking = true;
             lastAttack = Time.time;
-        }
-        else if (isAttacking && Time.time - lastAttack >= 1 / attackSpeed)
-        {
-            animator.SetFloat("Attack_Melee", 0);
-            isAttacking = false;
-            hadEffect = false;
         }
         else if (isAttacking && !hadEffect && Time.time - lastAttack >= 1 / attackSpeed / 2)
         {
             GameObject bullet = Instantiate(bulletPrefab, bulletOrigin.position, Quaternion.LookRotation(towardsPlayer, Vector3.up));
-            bullet.GetComponent<BulletController>().setBullet(towardsPlayer.normalized * bulletSpeed, attackDamage);
+            bullet.GetComponent<BulletController>().setBullet(towardsPlayer.normalized * bulletSpeed, rangedAttackDamage);
             hadEffect = true;
         }
     }
@@ -156,6 +177,8 @@ public class EnemyController : MonoBehaviour
     public void DealDamage(float damage, Transform source = null)
     {
         currentHealth -= damage;
+        FlashHandler(true);
+
         IsAlive();
 
         if(source != null)
@@ -175,5 +198,18 @@ public class EnemyController : MonoBehaviour
     public void Alert()
     {
         isAlerted = true;
+    }
+
+    void FlashHandler(bool tookDamage = false)
+    {
+        if(tookDamage)
+        {
+            damageFlashStart = Time.time;
+            foreach (SkinnedMeshRenderer s in renderers)
+                s.material = flashMaterial;
+        }
+        else if(Time.time - damageFlashStart >= damageFlashDuration)
+            foreach(SkinnedMeshRenderer s in renderers)
+                s.material = baseMaterial;
     }
 }
