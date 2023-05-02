@@ -32,7 +32,7 @@ public class MeleeHitboxController : MonoBehaviour
         }
         else if(other.CompareTag("Destroyable"))
         {
-            other.gameObject.SetActive(false);
+            other.gameObject.GetComponent<DestroyableScript>().Break();
         }
     }
 }

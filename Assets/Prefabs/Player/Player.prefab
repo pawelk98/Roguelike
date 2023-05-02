@@ -2911,7 +2911,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5171432145727640036}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0.09000076}
+  m_LocalPosition: {x: 0, y: 0, z: 0.09000076}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4275,6 +4275,16 @@ MonoBehaviour:
   meleeColliderPrefab: {fileID: 3658446985480472045, guid: 41400009ad819214ba76d8209d2fdd3f,
     type: 3}
   attackOrigin: {fileID: 9202885907773585479}
+  flashMaterial: {fileID: 2100000, guid: 68e4173397ad9d246bc9c4c10e7d54c1, type: 2}
+  damageFlashDuration: 0.05
+  renderers:
+  - {fileID: 5085723345871764781}
+  - {fileID: 5987130808278225213}
+  - {fileID: 661432244111518608}
+  - {fileID: 1151404217287463304}
+  - {fileID: 9167938881974382977}
+  - {fileID: 3534934855600922452}
+  - {fileID: 789495683625551502}
 --- !u!1 &7918864518025169272
 GameObject:
   m_ObjectHideFlags: 0

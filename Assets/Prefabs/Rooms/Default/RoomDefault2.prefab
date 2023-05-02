@@ -1097,20 +1097,17 @@ MonoBehaviour:
   obstacles: {fileID: 1117010220183494633}
   spawners: {fileID: 7002981170302499552}
   torches: {fileID: 1472054871361010085}
-  enemies:
-  - {fileID: 2124067795823438566, guid: b89018c5fad8bff44892118d887f9c20, type: 3}
-  - {fileID: 1366834150080230544, guid: ae48d97328cdf724e8c69e1ed4b3e495, type: 3}
-  - {fileID: 1366834150080230544, guid: 1928ed2c22e3c624b8004484aceae5a5, type: 3}
   torch: {fileID: 5910402416840609095, guid: 31f0dc59fa23cfc4d9ce7fa6be141f77, type: 3}
-  wavesRangeMin: 3
-  wavesRangeMax: 4
+  wavesRangeMin: 2
+  wavesRangeMax: 3
   torchesCountRangeMin: 3
-  torchesCountRangeMax: 6
+  torchesCountRangeMax: 5
   timeBetweenSpawn: 2.5
   survivalTimeRangeMin: 40
   survivalTimeRangeMax: 60
-  minConcurrentEnemies: 6
-  maxConcurrentEnemies: 10
+  minConcurrentEnemies: 4
+  maxConcurrentEnemies: 7
+  minDistToSpawn: 20
 --- !u!65 &5590653231110299877
 BoxCollider:
   m_ObjectHideFlags: 0

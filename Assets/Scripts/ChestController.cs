@@ -25,10 +25,9 @@ public class ChestController : MonoBehaviour
     {
         if(!state) 
         {
-            PlayerInventory.coins += coins;
+            PlayerInventory.Instance.AddCoins(coins);
             OpenChestModel();
             state = true;
-            UIController.Instance.SetCoins(PlayerInventory.coins);
         }
     }
 

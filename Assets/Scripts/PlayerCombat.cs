@@ -12,15 +12,21 @@ public class PlayerCombat : MonoBehaviour
     public PlayerMovementScript playerMovementScript;
     public GameObject meleeColliderPrefab;
     public Transform attackOrigin;
+    public Material flashMaterial;
+    public float damageFlashDuration;
+    public List<SkinnedMeshRenderer> renderers;
+    Material baseMaterial;
+    float damageFlashStart;
 
     void Start()
     {
+        baseMaterial = renderers[0].material;
         UIController.Instance.SetHealth((int)currentHealth);
     }
 
     void Update()
     {
-        
+        FlashHandler();
     }
 
     public bool DealMeleeDamage(float damage)
@@ -28,6 +34,7 @@ public class PlayerCombat : MonoBehaviour
         if (!playerMovementScript.isDodging)
         {
             currentHealth -= damage;
+            FlashHandler(true);
             UIController.Instance.SetHealth((int)currentHealth);
             isAlive();
             return true;
@@ -40,6 +47,7 @@ public class PlayerCombat : MonoBehaviour
         if(!playerMovementScript.isDodging)
         {
             currentHealth -= damage;
+            FlashHandler(true);
             UIController.Instance.SetHealth((int)currentHealth);
             isAlive();
             return true;
@@ -67,5 +75,18 @@ public class PlayerCombat : MonoBehaviour
     {
         GameObject meleeCollider = Instantiate(meleeColliderPrefab, attackOrigin.transform.position, Quaternion.LookRotation(transform.rotation.eulerAngles, Vector3.up));
         meleeCollider.GetComponent<MeleeHitboxController>().SetDamage(damage);
+    }
+
+    void FlashHandler(bool tookDamage = false)
+    {
+        if (tookDamage)
+        {
+            damageFlashStart = Time.time;
+            foreach (SkinnedMeshRenderer s in renderers)
+                s.material = flashMaterial;
+        }
+        else if (Time.time - damageFlashStart >= damageFlashDuration)
+            foreach (SkinnedMeshRenderer s in renderers)
+                s.material = baseMaterial;
     }
 }
