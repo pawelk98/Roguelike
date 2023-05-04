@@ -12,6 +12,7 @@ public class Enemies : MonoBehaviour
     public GameObject[] skeletons;
     public GameObject[] goblins;
     public GameObject[] spiders;
+    public GameObject[] golems;
 
     public int primaryToSecondaryRatio = 4;
 
@@ -33,13 +34,15 @@ public class Enemies : MonoBehaviour
     void Start()
     {
         enemiesByType = new List<GameObject[]>();
-        allEnemies = new GameObject[skeletons.Length + goblins.Length + spiders.Length];
+        allEnemies = new GameObject[skeletons.Length + goblins.Length + spiders.Length + golems.Length];
         for (int i = 0; i < skeletons.Length; i++)
             allEnemies[i] = skeletons[i];
         for (int i = 0; i < goblins.Length; i++)
             allEnemies[i + skeletons.Length] = goblins[i];
         for (int i = 0; i < spiders.Length; i++)
-            allEnemies[i + skeletons.Length + goblins.Length] = spiders[i];
+            allEnemies[i + skeletons.Length + goblins.Length] = spiders[i];        
+        for (int i = 0; i < golems.Length; i++)
+            allEnemies[i + skeletons.Length + goblins.Length + spiders.Length] = golems[i];
     }
 
     public GameObject[] GetEnemies()
@@ -53,6 +56,7 @@ public class Enemies : MonoBehaviour
         enemiesByType.Add(skeletons);
         enemiesByType.Add(goblins);
         enemiesByType.Add(spiders);
+        enemiesByType.Add(golems);
 
         string probabilities = "";
 

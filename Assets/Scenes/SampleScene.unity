@@ -1304,6 +1304,8 @@ MonoBehaviour:
   - {fileID: 4058906087121189518, guid: bea937e91a6a42846bcd75370518e126, type: 3}
   - {fileID: 4058906087121189518, guid: ca14d00b9d561ec48b6f3d4414316ce9, type: 3}
   - {fileID: 4058906087121189518, guid: c6569fc9eab762349889394f938cf914, type: 3}
+  golems:
+  - {fileID: 3250479568401416812, guid: 06bb84e24964fe34a9a34715040ce2ef, type: 3}
   primaryToSecondaryRatio: 4
 --- !u!1 &1211608523
 GameObject:
