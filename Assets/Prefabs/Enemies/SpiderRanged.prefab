@@ -1343,6 +1343,7 @@ MonoBehaviour:
   isRanged: 1
   isMelee: 0
   damageFlashDuration: 0.05
+  deadBodyDuration: 120
   alertRange: 10
   scanRate: 1
   agent: {fileID: 4058906087121189507}
@@ -1354,6 +1355,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 831
+  collid: {fileID: 4058906087121189505}
   flashMaterial: {fileID: 2100000, guid: 68e4173397ad9d246bc9c4c10e7d54c1, type: 2}
   renderers:
   - {fileID: 8026240735112744565}

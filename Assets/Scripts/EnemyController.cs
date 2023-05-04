@@ -1,7 +1,5 @@
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -20,6 +18,7 @@ public class EnemyController : MonoBehaviour
     public bool isRanged;
     public bool isMelee;
     public float damageFlashDuration;
+    public float deadBodyDuration;
     float damageFlashStart;
     float lastAttack;
 
@@ -39,11 +38,13 @@ public class EnemyController : MonoBehaviour
     public Transform bulletOrigin;
     public Rigidbody rigidBody;
     public LayerMask layerMask;
+    public Collider collid;
     Material baseMaterial;
     public Material flashMaterial;
     public List<SkinnedMeshRenderer> renderers;
     GameObject player;
     PlayerCombat playerCombat;
+    bool isAlive = true;
 
     void Start()
     {
@@ -59,6 +60,13 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
+        if (!isAlive)
+        {
+            agent.enabled = false;
+            collid.enabled = false;
+            return;
+        }
+
         if (player != null)
         {
             towardsPlayer = player.transform.position - transform.position;
@@ -178,21 +186,28 @@ public class EnemyController : MonoBehaviour
 
     public void DealDamage(float damage, Transform source = null)
     {
-        currentHealth -= damage;
-        FlashHandler(true);
+        if (!isAlive)
+            return;
 
-        IsAlive();
+        currentHealth -= damage;
+        StartCoroutine(FlashHandler(true));
+
+        StartCoroutine(IsAlive());
 
         if(source != null)
             agent.velocity = (transform.position - source.position).normalized * damage / mass;
     }
 
-    void IsAlive()
+    IEnumerator IsAlive()
     {
         if (currentHealth <= 0)
         {
             UIController.Instance.RemoveEnemy();
             RoomChange.currentRoom.GetComponent<RoomController>().KillEnemy(gameObject);
+            animator.SetBool("IsDead", true);
+            isAlive = false;
+
+            yield return new WaitForSeconds(deadBodyDuration);
             Destroy(gameObject);
         }
     }
@@ -202,16 +217,17 @@ public class EnemyController : MonoBehaviour
         isAlerted = true;
     }
 
-    void FlashHandler(bool tookDamage = false)
+    IEnumerator FlashHandler(bool tookDamage = false)
     {
         if(tookDamage)
         {
             damageFlashStart = Time.time;
             foreach (SkinnedMeshRenderer s in renderers)
                 s.material = flashMaterial;
-        }
-        else if(Time.time - damageFlashStart >= damageFlashDuration)
-            foreach(SkinnedMeshRenderer s in renderers)
+
+            yield return new WaitForSeconds(damageFlashDuration);
+            foreach (SkinnedMeshRenderer s in renderers)
                 s.material = baseMaterial;
+        }
     }
 }
