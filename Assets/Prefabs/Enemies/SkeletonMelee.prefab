@@ -577,10 +577,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6880205327bddb3448f3e48f65695cde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  quantity: 2
   health: 20
   meleeAttackRange: 1.2
   rangedAttackRange: 0
-  meleeAttackDamage: 5
+  meleeAttackDamage: 4
   rangedAttackDamage: 0
   attackSpeed: 1
   bulletSpeed: 5

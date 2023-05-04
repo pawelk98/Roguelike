@@ -1331,13 +1331,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6880205327bddb3448f3e48f65695cde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  quantity: 3
   health: 20
   meleeAttackRange: 0
-  rangedAttackRange: 7
+  rangedAttackRange: 5
   meleeAttackDamage: 0
   rangedAttackDamage: 2
-  attackSpeed: 2.5
-  bulletSpeed: 6
+  attackSpeed: 1.5
+  bulletSpeed: 5
   mass: 1
   isRanged: 1
   isMelee: 0

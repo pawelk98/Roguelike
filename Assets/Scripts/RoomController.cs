@@ -23,8 +23,10 @@ public class RoomController : MonoBehaviour
     public float timeBetweenSpawn;
     public float survivalTimeRangeMin;
     public float survivalTimeRangeMax;
-    public int minConcurrentEnemies;
-    public int maxConcurrentEnemies;
+    public int waveSizeMin;
+    public int waveSizeMax;
+    public int torchesEnemiesMax;
+    public int torchesEnemiesMin;
 
     bool[] entrances;
     int roomGoal;
@@ -33,7 +35,8 @@ public class RoomController : MonoBehaviour
     float lastSpawnTime = -100;
     int wavesCount;
     int currentWave = 0;
-    int concurrentEnemies;
+    int waveSize;
+    int torchesEnemyCount;
     float roomEnterTime;
     float survivalTime;
     List<GameObject> generatedTorches;
@@ -42,7 +45,7 @@ public class RoomController : MonoBehaviour
     List<Transform> torchPos;
     GameObject[] enemies;
     string probabilities;
-
+    int enemyCountWeighted = 0;
 
     private void Awake()
     {
@@ -80,11 +83,12 @@ public class RoomController : MonoBehaviour
 
         aliveEnemies = new List<GameObject>();
         wavesCount = UnityEngine.Random.Range(wavesRangeMin, wavesRangeMax + 1);
-        concurrentEnemies = UnityEngine.Random.Range(minConcurrentEnemies, maxConcurrentEnemies + 1);
+        waveSize = UnityEngine.Random.Range(waveSizeMin, waveSizeMax + 1);
         survivalTime = UnityEngine.Random.Range(survivalTimeRangeMin, survivalTimeRangeMax);
         generatedTorches= new List<GameObject>();
         torchesCount = UnityEngine.Random.Range(torchesCountRangeMin, torchesCountRangeMax + 1);
-        concurrentEnemies = UnityEngine.Random.Range(minConcurrentEnemies, maxConcurrentEnemies + 1);
+        waveSize = UnityEngine.Random.Range(waveSizeMin, waveSizeMax + 1);
+        torchesEnemyCount = UnityEngine.Random.Range(torchesEnemiesMin, torchesEnemiesMax + 1);
 
         if(roomGoal == 2)
         {
@@ -195,7 +199,10 @@ public class RoomController : MonoBehaviour
     public void KillEnemy(GameObject enemy)
     {
         if(aliveEnemies.Contains(enemy))
+        {
             aliveEnemies.Remove(enemy);
+            enemyCountWeighted -= 1 / enemy.GetComponent<EnemyController>().quantity;
+        }
     }
 
     void WavesGoalScenario()
@@ -204,7 +211,7 @@ public class RoomController : MonoBehaviour
         {
             UIController.Instance.SetGoalProgress((currentWave + 1).ToString() + " / " + wavesCount.ToString());
 
-            for (int i = 0; i < concurrentEnemies; i++)
+            for (int i = 0; i < waveSize; i++)
                 SpawnEnemy();
                 
             currentWave++;
@@ -255,8 +262,11 @@ public class RoomController : MonoBehaviour
 
         if (!allTorchesLit)
         {
-            if (aliveEnemies.Count < concurrentEnemies)
+            if (enemyCountWeighted < torchesEnemyCount && Time.time - lastSpawnTime >= timeBetweenSpawn)
+            {
+                lastSpawnTime = Time.time;
                 SpawnEnemy();
+            }
         }
         else if (!roomClear && aliveEnemies.Count == 0)
         {
@@ -269,13 +279,19 @@ public class RoomController : MonoBehaviour
     void SpawnEnemy(bool alert = false)
     {
         int chosenEnemy = probabilities[UnityEngine.Random.Range(0, probabilities.Length)] - '0';
-        GameObject instantiatedEnemy = Instantiate(enemies[chosenEnemy], spawnerPos[UnityEngine.Random.Range(0, spawnerPos.Count)]);
-        instantiatedEnemy.GetComponent<NavMeshAgent>().enabled = true;
+        int quantity = enemies[chosenEnemy].GetComponent<EnemyController>().quantity;
 
-        if (alert)
-            instantiatedEnemy.GetComponent<EnemyController>().Alert();
+        for (int i = 0; i < quantity; i++)
+        {
+            GameObject instantiatedEnemy = Instantiate(enemies[chosenEnemy], spawnerPos[UnityEngine.Random.Range(0, spawnerPos.Count)]);
+            instantiatedEnemy.GetComponent<NavMeshAgent>().enabled = true;
 
-        aliveEnemies.Add(instantiatedEnemy);
+            if (alert)
+                instantiatedEnemy.GetComponent<EnemyController>().Alert();
+
+            aliveEnemies.Add(instantiatedEnemy);
+            enemyCountWeighted += 1 / quantity;
+        }
     }
 
     public void KillAllEnemies()

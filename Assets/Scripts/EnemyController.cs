@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -6,6 +7,7 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
+    public int quantity;
     public float health;
     float currentHealth;
     public float meleeAttackRange;

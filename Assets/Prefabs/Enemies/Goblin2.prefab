@@ -1519,12 +1519,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6880205327bddb3448f3e48f65695cde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 20
+  quantity: 2
+  health: 10
   meleeAttackRange: 1.3
   rangedAttackRange: 7
   meleeAttackDamage: 4
   rangedAttackDamage: 4
-  attackSpeed: 2
+  attackSpeed: 1.5
   bulletSpeed: 6
   mass: 4
   isRanged: 1

@@ -1589,15 +1589,16 @@ MonoBehaviour:
   torches: {fileID: 7592871924696872972}
   torch: {fileID: 5910402416840609095, guid: 31f0dc59fa23cfc4d9ce7fa6be141f77, type: 3}
   wavesRangeMin: 2
-  wavesRangeMax: 3
+  wavesRangeMax: 4
   torchesCountRangeMin: 3
   torchesCountRangeMax: 5
-  timeBetweenSpawn: 2.5
+  timeBetweenSpawn: 7
   survivalTimeRangeMin: 40
   survivalTimeRangeMax: 60
-  minConcurrentEnemies: 4
-  maxConcurrentEnemies: 7
-  minDistToSpawn: 20
+  waveSizeMin: 2
+  waveSizeMax: 4
+  torchesEnemiesMax: 1
+  torchesEnemiesMin: 2
 --- !u!65 &5590653231110299877
 BoxCollider:
   m_ObjectHideFlags: 0
