@@ -4222,11 +4222,12 @@ MonoBehaviour:
   animator: {fileID: 3469778419449123334}
   playerCombat: {fileID: -1204697239819582581}
   speed: 5
-  dodgeSpeed: 4
-  dodgeDuration: 0.8
+  dodgeSpeed: 5
+  dodgeDuration: 0.6
   dodgeCooldown: 0.7
   attackSpeed: 2.5
   attackCooldown: 0.7
+  attackMoveSpeedMod: 0.3
   maxAttackDirectionInputTime: 0.2
   isMoving: 0
   isDodging: 0

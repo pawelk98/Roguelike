@@ -13,6 +13,7 @@ public class PlayerMovementScript : MonoBehaviour
     public float dodgeCooldown = 2;
     public float attackSpeed = 1f;
     public float attackCooldown = 1f;
+    public float attackMoveSpeedMod = 0.5f;
     public float maxAttackDirectionInputTime = 0.2f;
 
     float attackStart;
@@ -57,20 +58,15 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Move(Vector3 inputDirection)
     {
-        if (inputDirection.magnitude == 0 || isAttacking)
-        {
-            playerRb.velocity = Vector3.zero;
-            animator.SetFloat("Moving", 0);
-            isMoving = false;
-        }
-        else if (!isDodging && !isAttacking)
-        {
-            Vector3 movementDirection = inputDirection.normalized * speed;
-            playerRb.velocity = movementDirection;
+        Vector3 movementDirection = inputDirection.normalized * speed;
+        if (isAttacking)
+            movementDirection *= attackMoveSpeedMod;
+        else
             transform.LookAt(playerRb.position + movementDirection);
-            animator.SetFloat("Moving", movementDirection.magnitude);
-            isMoving = true;
-        }
+
+        playerRb.velocity = movementDirection;
+        animator.SetFloat("Moving", movementDirection.magnitude);
+        isMoving = true;
     }
 
     void Dodge(Vector3 inputDirection)
