@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -8942699333723906099}
   - component: {fileID: -935354844813865799}
   m_Layer: 0
-  m_Name: MeleeHitbox
+  m_Name: GreatAxeHitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,8 +45,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.5, y: 1, z: 2}
+  m_Center: {x: 0, y: 0, z: 1}
 --- !u!114 &-8942699333723906099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be15c990dcce2984ab2c62b6aaec67f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.1
+  duration: 0.05
 --- !u!54 &-935354844813865799
 Rigidbody:
   m_ObjectHideFlags: 0

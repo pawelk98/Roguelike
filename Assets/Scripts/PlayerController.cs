@@ -1,20 +1,14 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PlayerMovementScript : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
+    public float speed = 10;
+    public float maxAttackDirectionInputTime = 0.2f;
+
     public Rigidbody playerRb;
     public Animator animator;
     public PlayerCombat playerCombat;
-
-    public float speed = 10;
-    public float dodgeSpeed = 30;
-    public float dodgeDuration = 0.1f;
-    public float dodgeCooldown = 2;
-    public float attackSpeed = 1f;
-    public float attackCooldown = 1f;
-    public float attackMoveSpeedMod = 0.5f;
-    public float maxAttackDirectionInputTime = 0.2f;
 
     float attackStart;
     float dodgeStart;
@@ -50,6 +44,26 @@ public class PlayerMovementScript : MonoBehaviour
         if (Input.GetKey("left"))
             attackInput.x -= 1;
 
+        if(!isAttacking && !isDodging)
+        {
+            if (Input.GetKey("1"))
+                PlayerInventory.Instance.SwitchWeapon(0);
+            if (Input.GetKey("2"))
+                PlayerInventory.Instance.SwitchWeapon(1);
+            if (Input.GetKey("3"))
+                PlayerInventory.Instance.SwitchWeapon(2);
+            if (Input.GetKey("4"))
+                PlayerInventory.Instance.SwitchWeapon(3);
+            if (Input.GetKey("5"))
+                PlayerInventory.Instance.SwitchWeapon(4);
+            if (Input.GetKey("6"))
+                PlayerInventory.Instance.SwitchWeapon(5);
+            if (Input.GetKey("7"))
+               PlayerInventory.Instance.SwitchWeapon(6);
+            if (Input.GetKey("8"))
+               PlayerInventory.Instance.SwitchWeapon(7);
+        }
+
         Move(moveInput);
         Dodge(moveInput);
         Attack(attackInput);
@@ -60,7 +74,7 @@ public class PlayerMovementScript : MonoBehaviour
     {
         Vector3 movementDirection = inputDirection.normalized * speed;
         if (isAttacking)
-            movementDirection *= attackMoveSpeedMod;
+            movementDirection *= PlayerInventory.Instance.currentWeapon.attackMoveSpeedMod;
         else
             transform.LookAt(playerRb.position + movementDirection);
 
@@ -71,15 +85,15 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Dodge(Vector3 inputDirection)
     {
-        if (Input.GetKeyDown("space") && !isDodging && Time.time - dodgeEnd >= dodgeCooldown)
+        if (Input.GetKeyDown("space") && !isDodging && Time.time - dodgeEnd >= PlayerInventory.Instance.currentWeapon.dodgeCooldown)
         {
             dodgeStart = Time.time;
             if (inputDirection.magnitude > 0)
-                dodgeDirection = inputDirection.normalized * dodgeSpeed;
+                dodgeDirection = inputDirection.normalized * PlayerInventory.Instance.currentWeapon.dodgeSpeed;
             else
-                dodgeDirection = transform.forward * dodgeSpeed;
+                dodgeDirection = transform.forward * PlayerInventory.Instance.currentWeapon.dodgeSpeed;
 
-            animator.SetFloat("Dodging", 1 / dodgeDuration);
+            animator.SetFloat("Dodging", 1 / PlayerInventory.Instance.currentWeapon.dodgeDuration);
             isDodging = true;
         }
 
@@ -88,7 +102,7 @@ public class PlayerMovementScript : MonoBehaviour
             playerRb.velocity = dodgeDirection;
             transform.LookAt(playerRb.position + dodgeDirection);
 
-            if (Time.time >= dodgeStart + dodgeDuration)
+            if (Time.time >= dodgeStart + PlayerInventory.Instance.currentWeapon.dodgeDuration)
             {
                 dodgeEnd = Time.time;
                 isDodging = false;
@@ -99,19 +113,40 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Attack(Vector3 inputDirection)
     {
-        if (inputDirection.magnitude > 0 && !isDodging && !isAttacking && Time.time - attackStart >= attackCooldown)
+        string animationTag;
+
+        switch(PlayerInventory.Instance.currentWeapon.type)
+        {
+            case 0:
+                animationTag = "Attack_1H";
+                break;
+            case 1:
+                animationTag = "Attack_1H";
+                break;
+            case 2:
+                animationTag = "Attack_2H";
+                break;
+            case 3:
+                animationTag = "Attack_Bow";
+                break;
+            default:
+                animationTag = "Attack_1H";
+                break;
+        }
+
+        if (inputDirection.magnitude > 0 && !isDodging && !isAttacking && Time.time - attackStart >= PlayerInventory.Instance.currentWeapon.attackCooldown)
         {
             attackStart = Time.time;
-            animator.SetFloat("Attack_Melee", attackSpeed);
+            animator.SetFloat(animationTag, PlayerInventory.Instance.currentWeapon.attackSpeed);
             isAttacking = true;
         }
-        else if (isAttacking && Time.time - attackStart >= 1 / attackSpeed)
+        else if (isAttacking && Time.time - attackStart >= 1 / PlayerInventory.Instance.currentWeapon.attackSpeed)
         {
-            animator.SetFloat("Attack_Melee", 0);
+            animator.SetFloat(animationTag, 0);
             isAttacking = false;
             hadEffect = false;
         }
-        else if (isAttacking && !hadEffect && Time.time - attackStart >= 1 / attackSpeed / 2)
+        else if (isAttacking && !hadEffect && Time.time - attackStart >= 1 / PlayerInventory.Instance.currentWeapon.attackSpeed / 2)
         {
             playerCombat.Attack();
             hadEffect = true;

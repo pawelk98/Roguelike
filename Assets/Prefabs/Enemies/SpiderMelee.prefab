@@ -1300,9 +1300,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 1.4198472
-  m_Height: 4.698749
+  m_Height: 7.560008
   m_Direction: 1
-  m_Center: {x: 0, y: 2.2888124, z: 0}
+  m_Center: {x: 0, y: 3.719449, z: 0}
 --- !u!54 &4058906087121189506
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1340,6 +1340,7 @@ MonoBehaviour:
   rangedAttackDamage: 0
   rangedAttackRange: 0
   bulletSpeed: 1
+  bulletLifetime: 10
   isMelee: 1
   meleeAttackDamage: 2
   meleeAttackRange: 1.5

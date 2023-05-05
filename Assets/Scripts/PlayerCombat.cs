@@ -5,21 +5,22 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
     public float health;
-    public float currentHealth;
-
-    public float damage;
-
-    public PlayerMovementScript playerMovementScript;
-    public GameObject meleeColliderPrefab;
-    public Transform attackOrigin;
-    public Material flashMaterial;
     public float damageFlashDuration;
+
+    public PlayerController playerController;
+    public GameObject[] meleeColliderPrefabs;
+    public GameObject[] bullets;
+    public Transform meleeAttackOrigin;
+    public Transform rangedAttackOrigin;
+    public Material flashMaterial;
     public List<SkinnedMeshRenderer> renderers;
+
     Material baseMaterial;
-    float damageFlashStart;
+    float currentHealth;
 
     void Start()
     {
+        currentHealth = health;
         baseMaterial = renderers[0].material;
         UIController.Instance.SetHealth((int)currentHealth);
     }
@@ -31,10 +32,10 @@ public class PlayerCombat : MonoBehaviour
 
     public bool DealMeleeDamage(float damage)
     {
-        if (!playerMovementScript.isDodging)
+        if (!playerController.isDodging)
         {
             currentHealth -= damage;
-            FlashHandler(true);
+            StartCoroutine(FlashHandler());
             UIController.Instance.SetHealth((int)currentHealth);
             isAlive();
             return true;
@@ -44,10 +45,10 @@ public class PlayerCombat : MonoBehaviour
 
     public bool DealRangedDamage(float damage)
     {
-        if(!playerMovementScript.isDodging)
+        if(!playerController.isDodging)
         {
             currentHealth -= damage;
-            FlashHandler(true);
+            StartCoroutine(FlashHandler());
             UIController.Instance.SetHealth((int)currentHealth);
             isAlive();
             return true;
@@ -73,20 +74,76 @@ public class PlayerCombat : MonoBehaviour
 
     public void Attack()
     {
-        GameObject meleeCollider = Instantiate(meleeColliderPrefab, attackOrigin.transform.position, Quaternion.LookRotation(transform.rotation.eulerAngles, Vector3.up));
-        meleeCollider.GetComponent<MeleeHitboxController>().SetDamage(damage);
+        GameObject attackObject = null;
+
+        switch (PlayerInventory.Instance.currentWeapon.type)
+        {
+            case 0:
+                attackObject = meleeColliderPrefabs[0];
+                break;
+            case 1:
+                attackObject = meleeColliderPrefabs[1];
+                break;
+            case 2:
+                attackObject = meleeColliderPrefabs[2];
+                break;
+            case 3:
+                attackObject = bullets[0];
+                break;
+            case 4:
+                attackObject = bullets[1];
+                break;
+            case 5:
+                attackObject = bullets[2];
+                break;
+        }
+
+        if (PlayerInventory.Instance.currentWeapon.type <= 2)    //melee
+        {
+            GameObject meleeCollider = Instantiate(attackObject, meleeAttackOrigin.transform);
+            meleeCollider.GetComponent<MeleeHitboxController>().SetDamage(PlayerInventory.Instance.currentWeapon.damage);
+        }
+        else   //ranged
+        {
+            Vector3 direction;
+
+            switch(PlayerInventory.Instance.currentWeapon.type)
+            {
+                case 3:
+                    Shoot(attackObject, transform.forward);
+                    break;
+                case 4:
+                    direction = Quaternion.AngleAxis(10f, Vector3.up) * transform.forward;
+                    Shoot(attackObject, direction);
+                    direction = transform.forward;
+                    Shoot(attackObject, direction);
+                    direction = Quaternion.AngleAxis(-10f, Vector3.up) * transform.forward;
+                    Shoot(attackObject, direction);
+                    break;
+                case 5:
+                    direction = Quaternion.AngleAxis(Random.Range(-2f, 2f), Vector3.up) * transform.forward;
+                    Shoot(attackObject, direction);
+                    break;
+            }
+        }
     }
 
-    void FlashHandler(bool tookDamage = false)
+    void Shoot(GameObject bulletPrefab, Vector3 direction)
     {
-        if (tookDamage)
-        {
-            damageFlashStart = Time.time;
-            foreach (SkinnedMeshRenderer s in renderers)
-                s.material = flashMaterial;
-        }
-        else if (Time.time - damageFlashStart >= damageFlashDuration)
-            foreach (SkinnedMeshRenderer s in renderers)
-                s.material = baseMaterial;
+        GameObject bullet = Instantiate(bulletPrefab, rangedAttackOrigin);
+        bullet.GetComponent<BulletController>().SetBullet(
+            direction * PlayerInventory.Instance.currentWeapon.bulletSpeed,
+            PlayerInventory.Instance.currentWeapon.damage, PlayerInventory.Instance.currentWeapon.bulletLifetime);
+    }
+
+    IEnumerator FlashHandler()
+    {
+        foreach (SkinnedMeshRenderer s in renderers)
+            s.material = flashMaterial;
+
+        yield return new WaitForSeconds(damageFlashDuration);
+
+        foreach (SkinnedMeshRenderer s in renderers)
+            s.material = baseMaterial;
     }
 }

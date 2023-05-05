@@ -15,6 +15,7 @@ public class EnemyController : MonoBehaviour
     public float rangedAttackDamage;
     public float rangedAttackRange;
     public float bulletSpeed;
+    public float bulletLifetime = 10f;
     public bool isMelee;
     public float meleeAttackDamage;
     public float meleeAttackRange;
@@ -135,7 +136,6 @@ public class EnemyController : MonoBehaviour
 
     void Attack()
     {
-        float start = Time.time;
         agent.isStopped = true;
         float distanceFromPlayer = towardsPlayer.magnitude;
 
@@ -143,9 +143,6 @@ public class EnemyController : MonoBehaviour
             StartCoroutine(AttackRanged());
         else if (isMelee)
             StartCoroutine(AttackMelee());
-
-
-        Debug.Log("TIME: " + (Time.time - start).ToString());
     }
 
     IEnumerator AttackMelee()
@@ -173,7 +170,7 @@ public class EnemyController : MonoBehaviour
         if(isAlive)
         {
             GameObject bullet = Instantiate(bulletPrefab, bulletOrigin.position, Quaternion.LookRotation(towardsPlayer, Vector3.up));
-            bullet.GetComponent<BulletController>().setBullet(towardsPlayer.normalized * bulletSpeed, rangedAttackDamage);
+            bullet.GetComponent<BulletController>().SetBullet(towardsPlayer.normalized * bulletSpeed, rangedAttackDamage, bulletLifetime);
         }
 
         yield return new WaitForSeconds((1 / attackSpeed) - (1 / attackSpeed) * attackDamageDelay);
