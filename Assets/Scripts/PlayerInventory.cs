@@ -26,6 +26,5 @@ public class PlayerInventory : MonoBehaviour
     {
         coins += ammount;
         UIController.Instance.SetCoins(coins);
-        Debug.Log(coins);
     }
 }

@@ -1348,7 +1348,7 @@ MonoBehaviour:
   scanRate: 1
   agent: {fileID: 4058906087121189507}
   animator: {fileID: 4058906087121189516}
-  bulletPrefab: {fileID: 8278149153335573786, guid: 0dfdba736c540b44fa0823c82f005d1e,
+  bulletPrefab: {fileID: 8278149153335573786, guid: bb15f51d050f6b34d9c05b0f7c8341b4,
     type: 3}
   bulletOrigin: {fileID: 7303569002979694394}
   rigidBody: {fileID: 4058906087121189506}
@@ -2735,7 +2735,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 344da3fc7e8ebf0469b3084b4257a780, type: 2}
+  - {fileID: 2100000, guid: ad7541f1a7737d7469eb26a99e3fffb4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -763,7 +763,7 @@ MonoBehaviour:
   scanRate: 1
   agent: {fileID: 1277717972274757412}
   animator: {fileID: 4670734259859401254}
-  bulletPrefab: {fileID: 8278149153335573786, guid: 0dfdba736c540b44fa0823c82f005d1e,
+  bulletPrefab: {fileID: 8278149153335573786, guid: 41dfaed6ec8ff6448a75c015c4ff769e,
     type: 3}
   bulletOrigin: {fileID: 1277717972571059160}
   rigidBody: {fileID: 1277717972274757415}
