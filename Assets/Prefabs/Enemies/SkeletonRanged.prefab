@@ -697,7 +697,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 87946a8e49872c545858e524b37be549, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -747,18 +747,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   quantity: 1
-  health: 30
-  meleeAttackRange: 0
-  rangedAttackRange: 15
-  meleeAttackDamage: 0
-  rangedAttackDamage: 10
-  attackSpeed: 0.3
-  bulletSpeed: 12
   mass: 3
+  health: 30
+  attackSpeed: 0.3
+  attackDamageDelay: 0.7
   isRanged: 1
+  rangedAttackDamage: 10
+  rangedAttackRange: 15
+  bulletSpeed: 12
   isMelee: 0
+  meleeAttackDamage: 0
+  meleeAttackRange: 0
   damageFlashDuration: 0.05
-  deadBodyDuration: 120
+  corpseDuration: 120
   alertRange: 100
   scanRate: 1
   agent: {fileID: 1277717972274757412}
@@ -771,11 +772,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 831
   collid: {fileID: 1277717972274741466}
-  flashMaterial: {fileID: 2100000, guid: 68e4173397ad9d246bc9c4c10e7d54c1, type: 2}
   renderers:
   - {fileID: 2497752777473181116}
   - {fileID: 4665566591925986626}
   - {fileID: 4656696744842626823}
+  flashMaterial: {fileID: 2100000, guid: 68e4173397ad9d246bc9c4c10e7d54c1, type: 2}
 --- !u!195 &1277717972274757412
 NavMeshAgent:
   m_ObjectHideFlags: 0

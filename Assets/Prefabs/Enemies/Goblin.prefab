@@ -1102,7 +1102,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 559597479e600184c9a13d2b968716ff, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -1174,18 +1174,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   quantity: 1
-  health: 20
-  meleeAttackRange: 1.3
-  rangedAttackRange: 10
-  meleeAttackDamage: 7
-  rangedAttackDamage: 5
-  attackSpeed: 1
-  bulletSpeed: 10
   mass: 5
+  health: 20
+  attackSpeed: 1
+  attackDamageDelay: 0.9
   isRanged: 1
+  rangedAttackDamage: 5
+  rangedAttackRange: 10
+  bulletSpeed: 10
   isMelee: 1
+  meleeAttackDamage: 7
+  meleeAttackRange: 1.3
   damageFlashDuration: 0.05
-  deadBodyDuration: 120
+  corpseDuration: 120
   alertRange: 10
   scanRate: 1
   agent: {fileID: 7340098869441464133}
@@ -1198,9 +1199,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 831
   collid: {fileID: 9174665327894495030}
-  flashMaterial: {fileID: 2100000, guid: 68e4173397ad9d246bc9c4c10e7d54c1, type: 2}
   renderers:
   - {fileID: 8980390744220594045}
+  flashMaterial: {fileID: 2100000, guid: 68e4173397ad9d246bc9c4c10e7d54c1, type: 2}
 --- !u!1 &8980390744223769137
 GameObject:
   m_ObjectHideFlags: 0

@@ -4222,8 +4222,8 @@ MonoBehaviour:
   animator: {fileID: 3469778419449123334}
   playerCombat: {fileID: -1204697239819582581}
   speed: 5
-  dodgeSpeed: 5
-  dodgeDuration: 0.6
+  dodgeSpeed: 10
+  dodgeDuration: 0.3
   dodgeCooldown: 0.7
   attackSpeed: 2.5
   attackCooldown: 0.7

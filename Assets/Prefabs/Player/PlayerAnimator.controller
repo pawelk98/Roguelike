@@ -341,7 +341,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Dodging
-  m_Speed: 1
+  m_Speed: 0.833
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1402110187396186538}
@@ -354,7 +354,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -5793807499516084442, guid: 17e69d5964e821a4ab631d7955fae33b,
+  m_Motion: {fileID: 8315546878889615532, guid: 226fa2610ec56a948b03d285bd6a8391,
     type: 3}
   m_Tag: 
   m_SpeedParameter: Dodging
@@ -369,7 +369,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Attack_Melee
-  m_Speed: 1
+  m_Speed: 0.867
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7613375627775874341}

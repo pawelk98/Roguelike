@@ -6,31 +6,27 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour
 {
     public int quantity;
-    public float health;
-    float currentHealth;
-    public float meleeAttackRange;
-    public float rangedAttackRange;
-    public float meleeAttackDamage;
-    public float rangedAttackDamage;
-    public float attackSpeed;
-    public float bulletSpeed;
     public float mass;
+    public float health;
+    public float attackSpeed;
+    [Range(0,1)]
+    public float attackDamageDelay;
     public bool isRanged;
+    public float rangedAttackDamage;
+    public float rangedAttackRange;
+    public float bulletSpeed;
     public bool isMelee;
+    public float meleeAttackDamage;
+    public float meleeAttackRange;
     public float damageFlashDuration;
-    public float deadBodyDuration;
-    float damageFlashStart;
-    float lastAttack;
-
+    public float corpseDuration;
     public float alertRange;
     public float scanRate = 1;
-    float lastScan;
 
+    float currentHealth;
     bool isAttacking;
-    bool hadEffect;
+    bool isAlive = true;
     bool isAlerted;
-
-    Vector3 towardsPlayer;
 
     public NavMeshAgent agent;
     public Animator animator;
@@ -39,12 +35,15 @@ public class EnemyController : MonoBehaviour
     public Rigidbody rigidBody;
     public LayerMask layerMask;
     public Collider collid;
-    Material baseMaterial;
-    public Material flashMaterial;
     public List<SkinnedMeshRenderer> renderers;
+    public Material flashMaterial;
+
+    Material baseMaterial;
     GameObject player;
     PlayerCombat playerCombat;
-    bool isAlive = true;
+    IEnumerator scanCoroutine;
+
+    Vector3 towardsPlayer;
 
     void Start()
     {
@@ -60,56 +59,59 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
+        animator.SetFloat("Running", agent.velocity.magnitude);
+
         if (!isAlive)
         {
             agent.enabled = false;
             collid.enabled = false;
+            rigidBody.velocity = Vector3.zero;
             return;
         }
 
-        if (player != null)
-        {
-            towardsPlayer = player.transform.position - transform.position;
-            if (!isAlerted)
-                ScanAlert();
-            else
-            {
-                RaycastHit hit;
-
-                float raycastRange;
-                if (isRanged)
-                    raycastRange = rangedAttackRange;
-                else
-                    raycastRange = meleeAttackRange;
-
-                Physics.Raycast(transform.position, towardsPlayer, out hit, raycastRange, layerMask);
-
-                if (isAttacking || hit.collider != null && hit.collider.CompareTag("Player"))
-                {
-                    Attack();
-                }
-                else if (!isAttacking)
-                {
-                    Move();
-                }
-
-            }
-        }
-        else
+        if (player == null)
         {
             player = GameObject.FindGameObjectWithTag("Player");
             if (player)
                 playerCombat = player.GetComponent<PlayerCombat>();
+            else
+                return;
         }
 
-        CheckAttackEnd();
-        FlashHandler();
-        animator.SetFloat("Running", agent.velocity.magnitude);
+        towardsPlayer = player.transform.position - transform.position;
+
+        if (scanCoroutine == null && !isAlerted)
+        {
+            scanCoroutine = ScanAlert();
+            StartCoroutine(scanCoroutine);
+        }
+
+        if (!isAlerted)
+            return;
+
+        if (isAttacking)
+        {
+            transform.LookAt(player.transform);
+            return;
+        }
+
+        RaycastHit hit;
+        float raycastRange;
+        if (isRanged)
+            raycastRange = rangedAttackRange;
+        else
+            raycastRange = meleeAttackRange;
+
+        Physics.Raycast(transform.position, towardsPlayer, out hit, raycastRange, layerMask);
+        if (hit.collider != null && hit.collider.CompareTag("Player"))
+            Attack();
+        else
+            Move();
     }
 
-    void ScanAlert()
+    IEnumerator ScanAlert()
     {
-        if(Time.time - lastScan >= 1/scanRate)
+        while(true)
         {
             RaycastHit hit;
             Physics.Raycast(transform.position, towardsPlayer, out hit, alertRange, layerMask);
@@ -117,7 +119,10 @@ public class EnemyController : MonoBehaviour
             if (hit.collider && hit.collider.CompareTag("Player"))
             {
                 isAlerted = true;
+                StopCoroutine(scanCoroutine);
             }
+
+            yield return new WaitForSeconds(1/scanRate);
         }
     }
 
@@ -130,72 +135,50 @@ public class EnemyController : MonoBehaviour
 
     void Attack()
     {
+        float start = Time.time;
         agent.isStopped = true;
-        transform.LookAt(player.transform);
-
         float distanceFromPlayer = towardsPlayer.magnitude;
 
-        if (isMelee && distanceFromPlayer <= meleeAttackRange)
-            AttackMelee();
-        else if (isRanged && distanceFromPlayer <= rangedAttackRange)
-            AttackRanged();
+        if (isRanged && distanceFromPlayer >= meleeAttackRange)
+            StartCoroutine(AttackRanged());
+        else if (isMelee)
+            StartCoroutine(AttackMelee());
+
+
+        Debug.Log("TIME: " + (Time.time - start).ToString());
     }
 
-    void AttackMelee()
+    IEnumerator AttackMelee()
     {
-        if(isAlerted && !isAttacking && towardsPlayer.magnitude <= meleeAttackRange)
-        {
-            animator.SetFloat("Attack_Melee", attackSpeed);
-            isAttacking = true;
-            lastAttack = Time.time;
-        }
-        else if (isAttacking && !hadEffect && Time.time - lastAttack >= 1 / attackSpeed / 2)
-        {
-            if (towardsPlayer.magnitude <= meleeAttackRange)
-                playerCombat.DealMeleeDamage(meleeAttackDamage);
-            hadEffect = true;
-        }
+        isAttacking = true;
+        animator.SetFloat("Attack_Melee", attackSpeed);
+
+        yield return new WaitForSeconds((1 / attackSpeed) * attackDamageDelay);
+
+        if (towardsPlayer.magnitude <= meleeAttackRange && isAlive)
+            playerCombat.DealMeleeDamage(meleeAttackDamage);
+
+        yield return new WaitForSeconds((1 / attackSpeed) - (1 / attackSpeed) * attackDamageDelay);
+        animator.SetFloat("Attack_Melee", 0);
+        isAttacking = false;
     }
 
-    void CheckAttackEnd()
+    IEnumerator AttackRanged()
     {
-        if (isAttacking && Time.time - lastAttack >= 1 / attackSpeed)
-        {
-            animator.SetFloat("Attack_Melee", 0);
-            animator.SetFloat("Attack_Ranged", 0);
-            isAttacking = false;
-            hadEffect = false;
-        }
-    }
+        isAttacking = true;
+        animator.SetFloat("Attack_Ranged", attackSpeed);
 
-    void AttackRanged()
-    {
-        if (isAlerted && !isAttacking && towardsPlayer.magnitude <= rangedAttackRange)
-        {
-            animator.SetFloat("Attack_Ranged", attackSpeed);
-            isAttacking = true;
-            lastAttack = Time.time;
-        }
-        else if (isAttacking && !hadEffect && Time.time - lastAttack >= 1 / attackSpeed / 2)
+        yield return new WaitForSeconds(1 / attackSpeed * attackDamageDelay);
+
+        if(isAlive)
         {
             GameObject bullet = Instantiate(bulletPrefab, bulletOrigin.position, Quaternion.LookRotation(towardsPlayer, Vector3.up));
             bullet.GetComponent<BulletController>().setBullet(towardsPlayer.normalized * bulletSpeed, rangedAttackDamage);
-            hadEffect = true;
         }
-    }
 
-    public void DealDamage(float damage, Transform source = null)
-    {
-        if (!isAlive)
-            return;
-
-        currentHealth -= damage;
-        StartCoroutine(FlashHandler(true));
-
-        StartCoroutine(IsAlive());
-
-        if(source != null)
-            agent.velocity = (transform.position - source.position).normalized * damage / mass;
+        yield return new WaitForSeconds((1 / attackSpeed) - (1 / attackSpeed) * attackDamageDelay);
+        animator.SetFloat("Attack_Ranged", 0);
+        isAttacking = false;
     }
 
     IEnumerator IsAlive()
@@ -207,9 +190,31 @@ public class EnemyController : MonoBehaviour
             animator.SetBool("IsDead", true);
             isAlive = false;
 
-            yield return new WaitForSeconds(deadBodyDuration);
+            yield return new WaitForSeconds(corpseDuration);
             Destroy(gameObject);
         }
+    }
+
+    IEnumerator DamageFlash()
+    {
+        foreach (SkinnedMeshRenderer s in renderers)
+            s.material = flashMaterial;
+        yield return new WaitForSeconds(damageFlashDuration);
+        foreach (SkinnedMeshRenderer s in renderers)
+            s.material = baseMaterial;
+    }
+
+    public void DealDamage(float damage, Transform source = null)
+    {
+        if (!isAlive)
+            return;
+
+        currentHealth -= damage;
+        StartCoroutine(DamageFlash());
+        StartCoroutine(IsAlive());
+
+        if(source != null)
+            agent.velocity = (transform.position - source.position).normalized * damage / mass;
     }
 
     public void Alert()
@@ -217,17 +222,9 @@ public class EnemyController : MonoBehaviour
         isAlerted = true;
     }
 
-    IEnumerator FlashHandler(bool tookDamage = false)
+    private void OnCollisionExit(Collision collision)
     {
-        if(tookDamage)
-        {
-            damageFlashStart = Time.time;
-            foreach (SkinnedMeshRenderer s in renderers)
-                s.material = flashMaterial;
-
-            yield return new WaitForSeconds(damageFlashDuration);
-            foreach (SkinnedMeshRenderer s in renderers)
-                s.material = baseMaterial;
-        }
+        if (collision.collider.gameObject.CompareTag("Player"))
+            rigidBody.velocity = Vector3.zero;
     }
 }
