@@ -1332,6 +1332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   quantity: 3
+  reward: 1
   mass: 1
   health: 20
   attackSpeed: 1
@@ -1348,6 +1349,7 @@ MonoBehaviour:
   corpseDuration: 120
   alertRange: 10
   scanRate: 1
+  currentHealth: 0
   agent: {fileID: 4058906087121189507}
   animator: {fileID: 4058906087121189516}
   bulletPrefab: {fileID: 8278149153335573786, guid: bb15f51d050f6b34d9c05b0f7c8341b4,

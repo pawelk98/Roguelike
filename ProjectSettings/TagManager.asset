@@ -12,6 +12,7 @@ TagManager:
   - Environment
   - Destroyable
   - Torch
+  - WeaponShop
   layers:
   - Default
   - TransparentFX

@@ -1083,32 +1083,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b157e06e749eb154bb20c2453586162b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstacleChance: 50
+  torch: {fileID: 5910402416840609095, guid: 31f0dc59fa23cfc4d9ce7fa6be141f77, type: 3}
+  roomType: 0
   doors:
   - {fileID: 6209153089415376491}
   - {fileID: 9031607969477311943}
   - {fileID: 6017268218115871428}
   - {fileID: 1057908116706681021}
   boxCollider: {fileID: 5590653231110299877}
-  roomClear: 0
-  roomType: 0
   meshRenderers: []
   interior: {fileID: 6491622913574327214}
   obstacles: {fileID: 1117010220183494633}
   spawners: {fileID: 7002981170302499552}
   torches: {fileID: 1472054871361010085}
-  torch: {fileID: 5910402416840609095, guid: 31f0dc59fa23cfc4d9ce7fa6be141f77, type: 3}
-  wavesRangeMin: 2
-  wavesRangeMax: 4
-  torchesCountRangeMin: 3
-  torchesCountRangeMax: 5
-  timeBetweenSpawn: 7
-  survivalTimeRangeMin: 40
-  survivalTimeRangeMax: 60
-  waveSizeMin: 2
-  waveSizeMax: 4
-  torchesEnemiesMax: 1
-  torchesEnemiesMin: 2
+  obstacleChance: 50
+  reward: 50
 --- !u!65 &5590653231110299877
 BoxCollider:
   m_ObjectHideFlags: 0

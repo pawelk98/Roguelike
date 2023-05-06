@@ -50,5 +50,11 @@ public class BulletController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        else if (other.CompareTag("Destroyable") && ownedByPlayer)
+        {
+            other.gameObject.GetComponent<DestroyableScript>().Break();
+            if(!isPiercing)
+                Destroy(gameObject);
+        }
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour
 {
     public int quantity;
+    public int reward;
     public float mass;
     public float health;
     public float attackSpeed;
@@ -23,8 +24,8 @@ public class EnemyController : MonoBehaviour
     public float corpseDuration;
     public float alertRange;
     public float scanRate = 1;
+    public float currentHealth;
 
-    float currentHealth;
     bool isAttacking;
     bool isAlive = true;
     bool isAlerted;
@@ -60,8 +61,6 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
-        animator.SetFloat("Running", agent.velocity.magnitude);
-
         if (!isAlive)
         {
             agent.enabled = false;
@@ -105,9 +104,20 @@ public class EnemyController : MonoBehaviour
 
         Physics.Raycast(transform.position, towardsPlayer, out hit, raycastRange, layerMask);
         if (hit.collider != null && hit.collider.CompareTag("Player"))
+        {
+            animator.SetFloat("Running", 0);
             Attack();
+        }
         else
+        {
+            if(isMelee)
+                animator.SetFloat("Attack_Melee", 0);
+            if(isRanged)
+                animator.SetFloat("Attack_Ranged", 0);
+
+            animator.SetFloat("Running", agent.velocity.magnitude);
             Move();
+        }
     }
 
     IEnumerator ScanAlert()
@@ -156,7 +166,6 @@ public class EnemyController : MonoBehaviour
             playerCombat.DealMeleeDamage(meleeAttackDamage);
 
         yield return new WaitForSeconds((1 / attackSpeed) - (1 / attackSpeed) * attackDamageDelay);
-        animator.SetFloat("Attack_Melee", 0);
         isAttacking = false;
     }
 
@@ -174,7 +183,6 @@ public class EnemyController : MonoBehaviour
         }
 
         yield return new WaitForSeconds((1 / attackSpeed) - (1 / attackSpeed) * attackDamageDelay);
-        animator.SetFloat("Attack_Ranged", 0);
         isAttacking = false;
     }
 
@@ -186,6 +194,7 @@ public class EnemyController : MonoBehaviour
             RoomChange.currentRoom.GetComponent<RoomController>().KillEnemy(gameObject);
             animator.SetBool("IsDead", true);
             isAlive = false;
+            PlayerInventory.Instance.AddCoins(reward);
 
             yield return new WaitForSeconds(corpseDuration);
             Destroy(gameObject);

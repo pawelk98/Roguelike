@@ -35,33 +35,16 @@ public class PlayerController : MonoBehaviour
             moveInput.x -= 1;
 
         Vector3 attackInput = Vector3.zero;
-        if (Input.GetKey("up"))
-            attackInput.z += 1;
-        if (Input.GetKey("down"))
-            attackInput.z -= 1;
-        if (Input.GetKey("right"))
-            attackInput.x += 1;
-        if (Input.GetKey("left"))
-            attackInput.x -= 1;
-
-        if(!isAttacking && !isDodging)
+        if(!UIController.Instance.IsShopOpened())
         {
-            if (Input.GetKey("1"))
-                PlayerInventory.Instance.SwitchWeapon(0);
-            if (Input.GetKey("2"))
-                PlayerInventory.Instance.SwitchWeapon(1);
-            if (Input.GetKey("3"))
-                PlayerInventory.Instance.SwitchWeapon(2);
-            if (Input.GetKey("4"))
-                PlayerInventory.Instance.SwitchWeapon(3);
-            if (Input.GetKey("5"))
-                PlayerInventory.Instance.SwitchWeapon(4);
-            if (Input.GetKey("6"))
-                PlayerInventory.Instance.SwitchWeapon(5);
-            if (Input.GetKey("7"))
-               PlayerInventory.Instance.SwitchWeapon(6);
-            if (Input.GetKey("8"))
-               PlayerInventory.Instance.SwitchWeapon(7);
+            if (Input.GetKey("up"))
+                attackInput.z += 1;
+            if (Input.GetKey("down"))
+                attackInput.z -= 1;
+            if (Input.GetKey("right"))
+                attackInput.x += 1;
+            if (Input.GetKey("left"))
+                attackInput.x -= 1;
         }
 
         Move(moveInput);
@@ -169,16 +152,18 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Chest")
+        if(other.gameObject.CompareTag("Chest"))
         {
             chestInRange = other.gameObject;
             UIController.Instance.SetInteractionTip("open");
         }
-        else if (other.gameObject.tag == "Torch")
+        else if (other.gameObject.CompareTag("Torch"))
         {
             torchInRange = other.gameObject;
             UIController.Instance.SetInteractionTip("light");
         }
+        else if (other.gameObject.CompareTag("WeaponShop"))
+            UIController.Instance.OpenWeaponShop();
     }
 
     private void OnTriggerExit(Collider other)
@@ -193,5 +178,7 @@ public class PlayerController : MonoBehaviour
             torchInRange = null;
             UIController.Instance.RemoveInteractionTip();
         }
+        else if (other.gameObject.CompareTag("WeaponShop"))
+            UIController.Instance.CloseWeaponShop();
     }
 }

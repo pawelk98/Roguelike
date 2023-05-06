@@ -1,51 +1,45 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class RoomController : MonoBehaviour
 {
-    public float obstacleChance;
+    public GameObject torch;
+    public RoomGenerator.RoomType roomType;
     public GameObject[] doors;
     public BoxCollider boxCollider;
-    public bool roomClear = false;
-    public RoomGenerator.RoomType roomType;
     public MeshRenderer[] meshRenderers;
     public Transform interior;
     public Transform obstacles;
     public Transform spawners;
     public Transform torches;
-    public GameObject torch;
-    public int wavesRangeMin;
-    public int wavesRangeMax;
-    public int torchesCountRangeMin;
-    public int torchesCountRangeMax;
-    public float timeBetweenSpawn;
-    public float survivalTimeRangeMin;
-    public float survivalTimeRangeMax;
-    public int waveSizeMin;
-    public int waveSizeMax;
-    public int torchesEnemiesMax;
-    public int torchesEnemiesMin;
+    public float obstacleChance;
+    public int reward;
 
-    bool[] entrances;
     int roomGoal;
-    bool isGoalActive;
-    List<GameObject> aliveEnemies;
-    float lastSpawnTime = -100;
     int wavesCount;
     int currentWave = 0;
     int waveSize;
+    int enemyCountWeighted = 0;
     int torchesEnemyCount;
+    int torchesCount;
+    bool[] enemyWaveSpawned = new bool[] { false, false, false };
+    bool[] entrances;
+    bool isGoalActive;
+    bool roomClear;
+    float lastSpawnTime = -100;
     float roomEnterTime;
     float survivalTime;
+    string probabilities;
+    List<GameObject> aliveEnemies;
     List<GameObject> generatedTorches;
-    int torchesCount;
     List<Transform> spawnerPos;
     List<Transform> torchPos;
     GameObject[] enemies;
-    string probabilities;
-    int enemyCountWeighted = 0;
+    GameObject boss;
+    EnemyController bossScript;
 
     private void Awake()
     {
@@ -55,40 +49,52 @@ public class RoomController : MonoBehaviour
     }
     void Start()
     {
-        if (roomType == RoomGenerator.RoomType.Start)
-            RoomClear();
 
         boxCollider.enabled = true;
 
-        if (roomType == RoomGenerator.RoomType.Default)
+        if (roomType == RoomGenerator.RoomType.Start)
+        {
+            roomGoal = 5;
+            RoomClear();
+        }
+        else if (roomType == RoomGenerator.RoomType.Default)
         {
             enemies = Enemies.Instance.GetEnemies();
             probabilities = Enemies.Instance.GetEnemiesProbability();
             roomGoal = UnityEngine.Random.Range(0, 3);
         }
+        else if(roomType == RoomGenerator.RoomType.Treasure)
+        {
+            roomGoal = 3;
+        }
+        else if (roomType == RoomGenerator.RoomType.Boss)
+        {
+            enemies = Enemies.Instance.GetEnemies();
+            probabilities = Enemies.Instance.GetEnemiesProbability();
+            roomGoal = 4;
+        }
 
         spawnerPos = new List<Transform>();
         torchPos = new List<Transform>();
 
-        if (spawners != null && torches != null)
-        {
+        if (spawners != null)
             foreach (Transform t in spawners)
                 if (t != spawners)
                     spawnerPos.Add(t);
 
+        if(torches != null)
             foreach (Transform t in torches)
                 if (t != torches)
                     torchPos.Add(t);
-        }
 
         aliveEnemies = new List<GameObject>();
-        wavesCount = UnityEngine.Random.Range(wavesRangeMin, wavesRangeMax + 1);
-        waveSize = UnityEngine.Random.Range(waveSizeMin, waveSizeMax + 1);
-        survivalTime = UnityEngine.Random.Range(survivalTimeRangeMin, survivalTimeRangeMax);
+        wavesCount = UnityEngine.Random.Range(Enemies.Instance.wavesRangeMin, Enemies.Instance.wavesRangeMax + 1);
+        waveSize = UnityEngine.Random.Range(Enemies.Instance.waveSizeMin, Enemies.Instance.waveSizeMax + 1);
+        survivalTime = UnityEngine.Random.Range(Enemies.Instance.survivalTimeRangeMin, Enemies.Instance.survivalTimeRangeMax);
         generatedTorches= new List<GameObject>();
-        torchesCount = UnityEngine.Random.Range(torchesCountRangeMin, torchesCountRangeMax + 1);
-        waveSize = UnityEngine.Random.Range(waveSizeMin, waveSizeMax + 1);
-        torchesEnemyCount = UnityEngine.Random.Range(torchesEnemiesMin, torchesEnemiesMax + 1);
+        torchesCount = UnityEngine.Random.Range(Enemies.Instance.torchesCountRangeMin, Enemies.Instance.torchesCountRangeMax + 1);
+        waveSize = UnityEngine.Random.Range(Enemies.Instance.waveSizeMin, Enemies.Instance.waveSizeMax + 1);
+        torchesEnemyCount = UnityEngine.Random.Range(Enemies.Instance.torchesEnemiesMin, Enemies.Instance.torchesEnemiesMax + 1);
 
         if(roomGoal == 2)
         {
@@ -127,8 +133,13 @@ public class RoomController : MonoBehaviour
                 case 2:
                     TorchGoalScenario();
                     break;
+                case 3:
+                    Debug.Log("Treasure");
+                    break;
+                case 4:
+                    BossRoomScenario();
+                    break;
                 default:
-                    WavesGoalScenario();
                     break;
             }
         }
@@ -156,7 +167,7 @@ public class RoomController : MonoBehaviour
 
             roomEnterTime = Time.time;
             isGoalActive = true;
-            if (roomType == RoomGenerator.RoomType.Default)
+            if (roomType == RoomGenerator.RoomType.Default || roomType == RoomGenerator.RoomType.Boss)
                 UIController.Instance.SetGoal(roomGoal);
         }
     }
@@ -173,6 +184,8 @@ public class RoomController : MonoBehaviour
             if (entrances[i])
                 doors[i].SetActive(false);
         roomClear = true;
+
+        PlayerInventory.Instance.AddCoins(reward);
     }
 
     void SetMeshRenderersState(MeshRenderer[] renderers, bool state)
@@ -231,7 +244,7 @@ public class RoomController : MonoBehaviour
             TimeSpan timeSpan = TimeSpan.FromSeconds(survivalTime - Time.time + roomEnterTime);
             UIController.Instance.SetGoalProgress(timeSpan.Minutes + ":" + timeSpan.Seconds);
 
-            if (Time.time - lastSpawnTime >= timeBetweenSpawn)
+            if (Time.time - lastSpawnTime >= Enemies.Instance.timeBetweenSpawn)
             {
                 SpawnEnemy(true);
                 lastSpawnTime = Time.time;
@@ -262,7 +275,7 @@ public class RoomController : MonoBehaviour
 
         if (!allTorchesLit)
         {
-            if (enemyCountWeighted < torchesEnemyCount && Time.time - lastSpawnTime >= timeBetweenSpawn)
+            if (enemyCountWeighted < torchesEnemyCount && Time.time - lastSpawnTime >= Enemies.Instance.timeBetweenSpawn)
             {
                 lastSpawnTime = Time.time;
                 SpawnEnemy();
@@ -276,13 +289,58 @@ public class RoomController : MonoBehaviour
         }
     }
 
+    void BossRoomScenario()
+    {
+        if (boss == null)
+        {
+            boss = Instantiate(Enemies.Instance.GetBoss(), spawners);
+            boss.GetComponent<NavMeshAgent>().enabled = true;
+            bossScript = boss.GetComponent<EnemyController>();
+            aliveEnemies.Add(boss);
+        }
+        else
+        {
+            if (!enemyWaveSpawned[0] && bossScript.currentHealth <= bossScript.health / 4 * 3)
+            {
+                for (int i = 0; i < Enemies.Instance.bossWaves[0]; i++)
+                    SpawnEnemy(true);
+                enemyWaveSpawned[0] = true;
+            }
+
+            if (!enemyWaveSpawned[1] && bossScript.currentHealth <= bossScript.health / 4 * 2)
+            {
+                for (int i = 0; i < Enemies.Instance.bossWaves[1]; i++)
+                    SpawnEnemy(true);
+                enemyWaveSpawned[1] = true;
+            }
+
+            if (!enemyWaveSpawned[2] && bossScript.currentHealth <= bossScript.health / 4)
+            {
+                for (int i = 0; i < Enemies.Instance.bossWaves[2]; i++)
+                    SpawnEnemy(true);
+                enemyWaveSpawned[2] = true;
+            }
+        }
+        if (aliveEnemies.Count == 0)
+        {
+            UIController.Instance.SetGoalProgress("");
+            UIController.Instance.SetGoal(5);
+            RoomClear();
+        }
+
+        if (bossScript.currentHealth >= 0)
+            UIController.Instance.SetGoalProgress(((int)(bossScript.currentHealth / bossScript.health * 100)).ToString() + "%");
+        else
+            UIController.Instance.SetGoalProgress("Dead");
+    }
+
     void SpawnEnemy(bool alert = false)
     {
         int chosenEnemy = probabilities[UnityEngine.Random.Range(0, probabilities.Length)] - '0';
         int quantity = enemies[chosenEnemy].GetComponent<EnemyController>().quantity;
 
         for (int i = 0; i < quantity; i++)
-        {
+        {   
             GameObject instantiatedEnemy = Instantiate(enemies[chosenEnemy], spawnerPos[UnityEngine.Random.Range(0, spawnerPos.Count)]);
             instantiatedEnemy.GetComponent<NavMeshAgent>().enabled = true;
 

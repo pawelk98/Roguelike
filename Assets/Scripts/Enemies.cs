@@ -13,8 +13,22 @@ public class Enemies : MonoBehaviour
     public GameObject[] goblins;
     public GameObject[] spiders;
     public GameObject[] golems;
+    public GameObject[] bosses;
 
     public int primaryToSecondaryRatio = 4;
+
+    public int wavesRangeMin;
+    public int wavesRangeMax;
+    public int waveSizeMin;
+    public int waveSizeMax;
+    public int torchesCountRangeMin;
+    public int torchesCountRangeMax;
+    public int torchesEnemiesMin;
+    public int torchesEnemiesMax;
+    public int[] bossWaves;
+    public float survivalTimeRangeMin;
+    public float survivalTimeRangeMax;
+    public float timeBetweenSpawn;
 
     GameObject[] allEnemies;
     List<GameObject[]> enemiesByType;
@@ -48,6 +62,11 @@ public class Enemies : MonoBehaviour
     public GameObject[] GetEnemies()
     {
         return allEnemies;
+    }
+
+    public GameObject GetBoss()
+    {
+        return bosses[UnityEngine.Random.Range(0,bosses.Length)];
     }
 
     public string GetEnemiesProbability()

@@ -764,14 +764,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   quantity: 1
+  reward: 5
   mass: 10
-  health: 50
+  health: 100
   attackSpeed: 0.4
   attackDamageDelay: 0.55
   isRanged: 0
   rangedAttackDamage: 0
   rangedAttackRange: 0
   bulletSpeed: 0
+  bulletLifetime: 10
   isMelee: 1
   meleeAttackDamage: 15
   meleeAttackRange: 1.4
@@ -779,6 +781,7 @@ MonoBehaviour:
   corpseDuration: 120
   alertRange: 10
   scanRate: 1
+  currentHealth: 0
   agent: {fileID: 6476169671802821929}
   animator: {fileID: 4172815909180150196}
   bulletPrefab: {fileID: 8278149153335573786, guid: b93c508400aee3a43b65f6dadac4f548,

@@ -15,6 +15,10 @@ public class UIController : MonoBehaviour
     public GameObject treasureImg;
     public GameObject bossImg;
     public GameObject interaction;
+    public GameObject weaponShopUI;
+    public GameObject[] weaponItemsBg;
+    public TMP_Text[] weaponItemsName;
+    public TMP_Text[] weaponItemsPrice;
 
     public TMP_Text health;
     public TMP_Text coins;
@@ -22,17 +26,34 @@ public class UIController : MonoBehaviour
     public TMP_Text enemies;
     public TMP_Text interactionTip;
 
-    int enemyCount = 0;
+    bool isShopActive;
+    int enemyCount;
+    int itemSelected;
 
     private void Awake()
     {
         if (instance != null && instance != this)
-        {
             Destroy(this.gameObject);
-        }
         else
-        {
             instance = this;
+    }
+    void Update()
+    {
+        if(isShopActive)
+        {
+            if (Input.GetKeyDown("up"))
+                ChangeItem(false);
+            if (Input.GetKeyDown("down"))
+                ChangeItem(true);
+
+            if (Input.GetKeyDown("e"))
+                PlayerInventory.Instance.EquipWeapon(itemSelected);
+            if (Input.GetKeyDown("b"))
+            {
+                PlayerInventory.Instance.PurchaseWeapon(itemSelected);
+                SetWeaponNames();
+                SetWeaponPrices();
+            }
         }
     }
 
@@ -105,5 +126,59 @@ public class UIController : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void OpenWeaponShop()
+    {
+        SetWeaponNames();
+        SetWeaponPrices();
+        itemSelected = 0;
+        weaponItemsBg[itemSelected].SetActive(true);
+        weaponShopUI.SetActive(true);
+        isShopActive = true;
+    }
+
+    public void CloseWeaponShop()
+    {
+        weaponShopUI.SetActive(false);
+        weaponItemsBg[itemSelected].SetActive(false);
+        isShopActive = false;
+    }
+
+    public void ChangeItem(bool down)
+    {
+        weaponItemsBg[itemSelected].SetActive(false);
+        if (down)
+            itemSelected++;
+        else
+            itemSelected--;
+
+        if (itemSelected >= weaponItemsName.Length)
+            itemSelected = 0;
+        else if(itemSelected < 0)
+            itemSelected = weaponItemsName.Length - 1;
+
+        weaponItemsBg[itemSelected].SetActive(true);
+    }
+
+    public bool IsShopOpened()
+    {
+        return isShopActive;
+    }
+
+    void SetWeaponPrices()
+    {
+        string[] prices = PlayerInventory.Instance.GetPrices();
+
+        for (int i = 0; i < prices.Length; i++)
+            weaponItemsPrice[i].text = prices[i];
+    }
+
+    void SetWeaponNames()
+    {
+        string[] names = PlayerInventory.Instance.GetNames();
+
+        for (int i = 0; i < names.Length; i++)
+            weaponItemsName[i].text = names[i].ToString();
     }
 }
