@@ -1561,8 +1561,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 155, y: -135}
-  m_SizeDelta: {x: 100, y: 50}
+  m_AnchoredPosition: {x: 180, y: -135}
+  m_SizeDelta: {x: 150, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &643714899
 GameObject:
@@ -2819,7 +2819,7 @@ MonoBehaviour:
   mazeEnd: 100
   mazeMaxLength: 10
   offTrackDoorChance: 40
-  treasureRoomChance: 10
+  treasureRoomChance: 0
   offset: {x: 20, y: 20}
   playerSpawn: {fileID: 1205395267}
   navMeshSurface: {fileID: 1063345054}
@@ -2898,7 +2898,7 @@ MonoBehaviour:
   torchesCountRangeMax: 5
   torchesEnemiesMin: 3
   torchesEnemiesMax: 4
-  bossWaves: 
+  bossWaves: 050000000700000009000000
   survivalTimeRangeMin: 30
   survivalTimeRangeMax: 50
   timeBetweenSpawn: 6

@@ -321,7 +321,7 @@ public class RoomController : MonoBehaviour
                 enemyWaveSpawned[2] = true;
             }
         }
-        if (aliveEnemies.Count == 0)
+        if (aliveEnemies.Count == 0 && !roomClear)
         {
             UIController.Instance.SetGoalProgress("");
             UIController.Instance.SetGoal(5);
