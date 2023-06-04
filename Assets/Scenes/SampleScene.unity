@@ -693,6 +693,8 @@ GameObject:
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   - component: {fileID: 330585548}
+  - component: {fileID: 330585549}
+  - component: {fileID: 330585550}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -814,6 +816,138 @@ MonoBehaviour:
   player: {fileID: 0}
   offset: {x: 0, y: 13, z: -4}
   moveSpeed: 5
+--- !u!82 &330585549
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 016697a6d4f06cc488930e81edb8c5be, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.071
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &330585550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a8ace780c1a2a441b482b755042b001, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundMusic: {fileID: 330585549}
+  footsteps:
+  - {fileID: 8300000, guid: 5c0ebb87b27b5aa4d85c7701fed0c168, type: 3}
+  - {fileID: 8300000, guid: d0f7283bd6ef38d47b9996eacaf43571, type: 3}
+  - {fileID: 8300000, guid: 7357febf4b4ded8448bbd103c31fa8e4, type: 3}
+  meleeAttack:
+  - {fileID: 8300000, guid: 22256dec545faf64287379aff430087b, type: 3}
+  - {fileID: 8300000, guid: cef27fef64599414688fd04affeef5fa, type: 3}
+  - {fileID: 8300000, guid: 1ce92fd2b8cb03542b0819a49374f470, type: 3}
+  - {fileID: 8300000, guid: 486d00171ee7bd948b68ac49b5fb5e3a, type: 3}
+  bowAttack: {fileID: 8300000, guid: 06bf61cfad007e043ac73b4100934730, type: 3}
+  magicAttack:
+  - {fileID: 8300000, guid: 0f2b2f09895503643b1d67985f7035bb, type: 3}
+  - {fileID: 8300000, guid: b42f2741d0a91d146b25c6078adb26b6, type: 3}
+  doors: {fileID: 8300000, guid: 39d808c51d560f745a42ded57a590478, type: 3}
+  coins: {fileID: 8300000, guid: cef939f311cb6c343a434e04c79ab9e1, type: 3}
+  coinReward: {fileID: 8300000, guid: 8dfc42a3a318ae445a4ee623935b7bee, type: 3}
+  itemChange: {fileID: 8300000, guid: 4bbea50c57aa619459bb6f41f2ccbd54, type: 3}
+  dodge: {fileID: 8300000, guid: e062a6741c82b1d4bb40b76136a803f7, type: 3}
+  breakVase:
+  - {fileID: 8300000, guid: 5627b3a522c86b74fa73717b228d4a8f, type: 3}
+  - {fileID: 8300000, guid: ec46140e9a6b0384593435dd9e7ca77c, type: 3}
+  - {fileID: 8300000, guid: e9fa663e7515c8049aa2fcfa1f9f19c6, type: 3}
+  takeDamage: {fileID: 8300000, guid: 7295b50a5dfdfe0469030ce8cbaf9d2e, type: 3}
 --- !u!1 &358914810
 GameObject:
   m_ObjectHideFlags: 0

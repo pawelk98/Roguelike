@@ -1205,6 +1205,13 @@ MonoBehaviour:
   renderers:
   - {fileID: 8980390744220594045}
   flashMaterial: {fileID: 2100000, guid: 68e4173397ad9d246bc9c4c10e7d54c1, type: 2}
+  sounds:
+  - {fileID: 8300000, guid: 1edc98d8bc6ae9b4b913406ccb9ea3b7, type: 3}
+  - {fileID: 8300000, guid: 041f1bceaf6038d4d87057027f0976ec, type: 3}
+  - {fileID: 8300000, guid: cfcd16945c39c9644baab8ab43635749, type: 3}
+  - {fileID: 8300000, guid: c36ca7897acaea245bc91acd480c7825, type: 3}
+  - {fileID: 8300000, guid: 1e5297f52646d8642a93e24f1b6df223, type: 3}
+  rangedAttack: {fileID: 8300000, guid: 06bf61cfad007e043ac73b4100934730, type: 3}
 --- !u!1 &8980390744223769137
 GameObject:
   m_ObjectHideFlags: 0

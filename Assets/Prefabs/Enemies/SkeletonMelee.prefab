@@ -611,6 +611,22 @@ MonoBehaviour:
   - {fileID: 8647097032049331976}
   - {fileID: 1611962500510516902}
   flashMaterial: {fileID: 2100000, guid: 68e4173397ad9d246bc9c4c10e7d54c1, type: 2}
+  sounds:
+  - {fileID: 8300000, guid: 40310cc15a1376f44becfbe7bb8c8bbe, type: 3}
+  - {fileID: 8300000, guid: fde4dd16517da714a91baeb251c50ca6, type: 3}
+  - {fileID: 8300000, guid: 361466c2251b11945a5dac66ae5581ff, type: 3}
+  - {fileID: 8300000, guid: 99e1c08fc4c5d24469ec5e3ed3c320fc, type: 3}
+  - {fileID: 8300000, guid: e8d546da0d8624442b869bd7017b7c6d, type: 3}
+  - {fileID: 8300000, guid: 454f4607074be54439eaaf18797c8746, type: 3}
+  - {fileID: 8300000, guid: e25e23c3a44f92248a3a420ed2beffae, type: 3}
+  - {fileID: 8300000, guid: 09570b26f150ae64dbc4b82f4d356268, type: 3}
+  - {fileID: 8300000, guid: c39a97b84f477ea40b8e8cb10fcc398c, type: 3}
+  - {fileID: 8300000, guid: 1dddad3efb2a57148af68a7e4acb342b, type: 3}
+  - {fileID: 8300000, guid: c50800d5ff41d6d48af14d6b7f8707dc, type: 3}
+  - {fileID: 8300000, guid: 4a3bd30048a1ad34387fca10665e314c, type: 3}
+  - {fileID: 8300000, guid: 031244787a2492d499136518c981e3c7, type: 3}
+  - {fileID: 8300000, guid: cbd10eca270854f4dbb3e7e2956a924d, type: 3}
+  - {fileID: 8300000, guid: b7ae9138c2ea87b438c07f17c491feda, type: 3}
 --- !u!195 &3488747461291913238
 NavMeshAgent:
   m_ObjectHideFlags: 0

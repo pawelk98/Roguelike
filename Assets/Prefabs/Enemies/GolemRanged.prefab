@@ -795,6 +795,11 @@ MonoBehaviour:
   renderers:
   - {fileID: 3250479568412987146}
   flashMaterial: {fileID: 2100000, guid: 68e4173397ad9d246bc9c4c10e7d54c1, type: 2}
+  sounds:
+  - {fileID: 8300000, guid: a4339b88a4c52cf4cbb87d0f441ee4bc, type: 3}
+  - {fileID: 8300000, guid: 16f64d9b037a0a64a81c22c22f774811, type: 3}
+  - {fileID: 8300000, guid: eff4387a66c795d46b497381229040e6, type: 3}
+  rangedAttack: {fileID: 8300000, guid: 0f2b2f09895503643b1d67985f7035bb, type: 3}
 --- !u!1 &3250479568401416814
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,6 +22,7 @@ public class ChestController : MonoBehaviour
             PlayerInventory.Instance.AddCoins(coins);
             OpenChestModel();
             state = true;
+            SoundController.Instance.PlaySound(SoundController.Instance.coinReward, transform.position, 1f);
             StartCoroutine(EndGame());
         }
     }

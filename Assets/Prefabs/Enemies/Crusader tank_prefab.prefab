@@ -11956,6 +11956,22 @@ MonoBehaviour:
   - {fileID: 137838746229228974}
   - {fileID: 137863121561888578}
   flashMaterial: {fileID: 2100000, guid: 68e4173397ad9d246bc9c4c10e7d54c1, type: 2}
+  sounds:
+  - {fileID: 8300000, guid: b6c410cabea232644998a6b08cdeb06f, type: 3}
+  - {fileID: 8300000, guid: a460bbe7a2fb69245bcbfbf6496244f3, type: 3}
+  - {fileID: 8300000, guid: 979c7caa020e7824b9fd935d552be742, type: 3}
+  - {fileID: 8300000, guid: ee7bd43abb25c2d4b9babff4951db297, type: 3}
+  - {fileID: 8300000, guid: 120a591128c61504a94aa7160e5083fc, type: 3}
+  - {fileID: 8300000, guid: 1a82e7c0a028dfb409e08215da48bd13, type: 3}
+  - {fileID: 8300000, guid: b0bda1468d9830b4fb411ae270966d2e, type: 3}
+  - {fileID: 8300000, guid: 4e1200a078f79414c93a147f1ae614c1, type: 3}
+  - {fileID: 8300000, guid: 10837dcba8a4b3b4eb1f281aecaef101, type: 3}
+  - {fileID: 8300000, guid: a0e1e9706917b1744841c50d6546a894, type: 3}
+  - {fileID: 8300000, guid: f7fd9e2f3498a6945be15cabb3d504a0, type: 3}
+  - {fileID: 8300000, guid: bea08ef471dee9e49924116f2572458b, type: 3}
+  - {fileID: 8300000, guid: 63d4558ceec8b22419b32543b6a3a087, type: 3}
+  - {fileID: 8300000, guid: 4adcc0439f7c84248b0b27e1dbbe9a7b, type: 3}
+  - {fileID: 8300000, guid: bea4cdec5c3d26f4bb4ddf953da5bf42, type: 3}
 --- !u!1 &1953607639529104
 GameObject:
   m_ObjectHideFlags: 0

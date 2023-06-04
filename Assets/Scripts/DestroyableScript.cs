@@ -11,6 +11,7 @@ public class DestroyableScript : MonoBehaviour
     {
         int coins = Random.Range(coinsRangeMin, coinsRangeMax + 1);
         PlayerInventory.Instance.AddCoins(coins);
+        SoundController.Instance.PlayRandomSound(SoundController.Instance.breakVase, transform.position, 0.6f);
         gameObject.SetActive(false);
     }
 }

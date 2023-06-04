@@ -39,6 +39,8 @@ public class EnemyController : MonoBehaviour
     public Collider collid;
     public List<SkinnedMeshRenderer> renderers;
     public Material flashMaterial;
+    public AudioClip[] sounds;
+    public AudioClip rangedAttack;
 
     Material baseMaterial;
     GameObject player;
@@ -131,6 +133,7 @@ public class EnemyController : MonoBehaviour
             {
                 isAlerted = true;
                 StopCoroutine(scanCoroutine);
+                SoundController.Instance.PlayRandomSound(sounds, transform.position, 0.5f);
             }
 
             yield return new WaitForSeconds(1/scanRate);
@@ -159,11 +162,16 @@ public class EnemyController : MonoBehaviour
     {
         isAttacking = true;
         animator.SetFloat("Attack_Melee", attackSpeed);
+        if (Random.Range(0, 100) < 40)
+            SoundController.Instance.PlayRandomSound(sounds, transform.position, 0.35f);
 
         yield return new WaitForSeconds((1 / attackSpeed) * attackDamageDelay);
 
         if (towardsPlayer.magnitude <= meleeAttackRange && isAlive)
+        {
+            SoundController.Instance.PlayRandomSound(SoundController.Instance.meleeAttack, transform.position, 0.35f);
             playerCombat.DealMeleeDamage(meleeAttackDamage);
+        }
 
         yield return new WaitForSeconds((1 / attackSpeed) - (1 / attackSpeed) * attackDamageDelay);
         isAttacking = false;
@@ -174,11 +182,14 @@ public class EnemyController : MonoBehaviour
     {
         isAttacking = true;
         animator.SetFloat("Attack_Ranged", attackSpeed);
+        if(Random.Range(0,100) < 40)
+            SoundController.Instance.PlayRandomSound(sounds, transform.position, 0.35f);
 
         yield return new WaitForSeconds(1 / attackSpeed * attackDamageDelay);
 
-        if(isAlive)
+        if (isAlive)
         {
+            SoundController.Instance.PlaySound(rangedAttack, transform.position, 0.35f);
             GameObject bullet = Instantiate(bulletPrefab, bulletOrigin.position, Quaternion.LookRotation(towardsPlayer, Vector3.up));
             bullet.GetComponent<BulletController>().SetBullet(towardsPlayer.normalized * bulletSpeed, rangedAttackDamage, bulletLifetime);
         }
@@ -218,6 +229,7 @@ public class EnemyController : MonoBehaviour
             return;
 
         currentHealth -= damage;
+        SoundController.Instance.PlayRandomSound(sounds, transform.position, 0.5f);
         StartCoroutine(DamageFlash());
         StartCoroutine(IsAlive());
 

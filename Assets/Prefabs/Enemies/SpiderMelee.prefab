@@ -1363,6 +1363,13 @@ MonoBehaviour:
   renderers:
   - {fileID: 8026240735112744565}
   flashMaterial: {fileID: 2100000, guid: 68e4173397ad9d246bc9c4c10e7d54c1, type: 2}
+  sounds:
+  - {fileID: 8300000, guid: 66ff0be32ab553741bea4617d7ab2392, type: 3}
+  - {fileID: 8300000, guid: 8a5d1bbf9da75264bad5e4c3040fd7c0, type: 3}
+  - {fileID: 8300000, guid: 40f9471fe656f604aa0c4f8c285c8f9f, type: 3}
+  - {fileID: 8300000, guid: 894e5f2c292fea64989851f9007e2f98, type: 3}
+  - {fileID: 8300000, guid: e57a514255bbf4549848b3117f3c2e08, type: 3}
+  - {fileID: 8300000, guid: 2c91b3c59c30b244eb6bcab8da346495, type: 3}
 --- !u!195 &4058906087121189507
 NavMeshAgent:
   m_ObjectHideFlags: 0

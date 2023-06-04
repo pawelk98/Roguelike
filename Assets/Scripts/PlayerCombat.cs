@@ -17,6 +17,8 @@ public class PlayerCombat : MonoBehaviour
     public Transform rangedAttackOrigin;
     public Material flashMaterial;
     public List<SkinnedMeshRenderer> renderers;
+    public AudioClip attakcMelee;
+    public AudioClip attackRanged;
 
     Material baseMaterial;
     float currentHealth;
@@ -40,6 +42,7 @@ public class PlayerCombat : MonoBehaviour
             currentHealth -= damage / armor;
             StartCoroutine(FlashHandler());
             UIController.Instance.SetHealth((int)currentHealth);
+            SoundController.Instance.PlaySound(SoundController.Instance.takeDamage, transform.position, 0.6f);
             isAlive();
             return true;
         }
@@ -53,6 +56,7 @@ public class PlayerCombat : MonoBehaviour
             currentHealth -= damage / armor;
             StartCoroutine(FlashHandler());
             UIController.Instance.SetHealth((int)currentHealth);
+            SoundController.Instance.PlaySound(SoundController.Instance.takeDamage, transform.position, 0.6f);
             isAlive();
             return true;
         }
@@ -92,12 +96,15 @@ public class PlayerCombat : MonoBehaviour
                 break;
             case 3:
                 attackObject = bullets[0];
+                SoundController.Instance.PlaySound(SoundController.Instance.bowAttack, transform.position, 0.6f);
                 break;
             case 4:
                 attackObject = bullets[1];
+                SoundController.Instance.PlaySound(SoundController.Instance.magicAttack[0], transform.position, 0.6f);
                 break;
             case 5:
                 attackObject = bullets[2];
+                SoundController.Instance.PlaySound(SoundController.Instance.magicAttack[1], transform.position, 0.6f);
                 break;
         }
 
@@ -105,6 +112,7 @@ public class PlayerCombat : MonoBehaviour
         {
             GameObject meleeCollider = Instantiate(attackObject, meleeAttackOrigin.transform);
             meleeCollider.GetComponent<MeleeHitboxController>().SetDamage(damage);
+            SoundController.Instance.PlayRandomSound(SoundController.Instance.meleeAttack, transform.position, 0.6f);
         }
         else   //ranged
         {

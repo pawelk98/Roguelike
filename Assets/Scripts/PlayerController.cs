@@ -69,13 +69,24 @@ public class PlayerController : MonoBehaviour
 
         playerRb.velocity = movementDirection;
         animator.SetFloat("Moving", movementDirection.magnitude);
-        isMoving = true;
+
+        if(movementDirection.magnitude > 0.01 && !isMoving)
+        {
+            SoundController.Instance.StartFootsteps(0.35f);
+            isMoving = true;
+        }
+        else if (movementDirection.magnitude <= 0.01 && isMoving)
+        {
+            SoundController.Instance.StopFootsteps();
+            isMoving = false;
+        }    
     }
 
     void Dodge(Vector3 inputDirection)
     {
         if (Input.GetKeyDown("space") && !isDodging && Time.time - dodgeEnd >= PlayerInventory.Instance.currentWeapon.dodgeCooldown)
         {
+            SoundController.Instance.PlaySound(SoundController.Instance.dodge, transform.position, 1f);
             dodgeStart = Time.time;
             if (inputDirection.magnitude > 0)
                 dodgeDirection = inputDirection.normalized * PlayerInventory.Instance.currentWeapon.dodgeSpeed;

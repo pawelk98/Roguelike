@@ -156,6 +156,7 @@ public class UIController : MonoBehaviour
             itemSelected = weaponItemsName.Length - 1;
 
         weaponItemsBg[itemSelected].SetActive(true);
+        SoundController.Instance.PlaySound(SoundController.Instance.itemChange, SoundController.Instance.transform.position, 0.02f);
     }
 
     public bool IsShopOpened()

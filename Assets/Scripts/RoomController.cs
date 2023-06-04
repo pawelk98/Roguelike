@@ -163,6 +163,7 @@ public class RoomController : MonoBehaviour
             isGoalActive = true;
             if (roomType == RoomGenerator.RoomType.Default || roomType == RoomGenerator.RoomType.Boss)
                 UIController.Instance.SetGoal(roomGoal);
+            SoundController.Instance.PlaySound(SoundController.Instance.doors, transform.position, 1.5f);
         }
     }
 
@@ -180,6 +181,7 @@ public class RoomController : MonoBehaviour
         roomClear = true;
 
         PlayerInventory.Instance.AddCoins(reward);
+        SoundController.Instance.PlaySound(SoundController.Instance.doors, transform.position, 1.5f);
     }
 
     void SetMeshRenderersState(MeshRenderer[] renderers, bool state)

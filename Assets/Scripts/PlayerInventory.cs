@@ -144,6 +144,7 @@ public class PlayerInventory : MonoBehaviour
                 SetArmor();
                 Save.Instance.SetArmorOwnership(armorOwnership);
                 UIController.Instance.SetCoins(Coins);
+                SoundController.Instance.PlaySound(SoundController.Instance.coins, transform.position, 0.5f);
             }
         }
         else
@@ -156,6 +157,7 @@ public class PlayerInventory : MonoBehaviour
                 SwitchWeapon(id + 1);
                 SetDamage(id + 1);
                 UIController.Instance.SetCoins(Coins);
+                SoundController.Instance.PlaySound(SoundController.Instance.coins, transform.position, 0.5f);
             }
         }
     }
@@ -166,6 +168,7 @@ public class PlayerInventory : MonoBehaviour
         {
             SwitchWeapon(id + 1);
             SetDamage(id + 1);
+            SoundController.Instance.PlaySound(SoundController.Instance.itemChange, SoundController.Instance.transform.position, 0.02f);
         }
     }
 

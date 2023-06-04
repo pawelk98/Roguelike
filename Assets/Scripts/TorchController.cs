@@ -16,6 +16,8 @@ public class TorchController : MonoBehaviour
     {
         lightBall.SetActive(true);
         isActivated = true;
+        SoundController.Instance.PlaySound(SoundController.Instance.itemChange, transform.position, 0.3f);
+
     }
 
     public bool IsActivated()
