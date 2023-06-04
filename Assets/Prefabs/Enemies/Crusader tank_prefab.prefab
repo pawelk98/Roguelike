@@ -11908,7 +11908,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   quantity: 1
-  reward: 50
+  reward: 0
   mass: 100
   health: 1000
   attackSpeed: 0.5

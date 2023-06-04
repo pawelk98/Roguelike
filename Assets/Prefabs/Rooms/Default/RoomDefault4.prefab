@@ -1300,7 +1300,7 @@ MonoBehaviour:
   spawners: {fileID: 1886074788349780276}
   torches: {fileID: 8998307966060638199}
   obstacleChance: 50
-  reward: 50
+  reward: 20
 --- !u!65 &5590653231110299877
 BoxCollider:
   m_ObjectHideFlags: 0

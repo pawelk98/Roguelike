@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -51,6 +52,11 @@ public class PlayerController : MonoBehaviour
         Dodge(moveInput);
         Attack(attackInput);
         Interact();
+
+        if (Input.GetKey("r"))
+            Save.Instance.SaveAndRestart();
+        if (Input.GetKey("m"))
+            PlayerInventory.Instance.AddCoins(1000);
     }
 
     void Move(Vector3 inputDirection)

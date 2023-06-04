@@ -167,6 +167,7 @@ public class EnemyController : MonoBehaviour
 
         yield return new WaitForSeconds((1 / attackSpeed) - (1 / attackSpeed) * attackDamageDelay);
         isAttacking = false;
+        animator.SetFloat("Attack_Melee", 0);
     }
 
     IEnumerator AttackRanged()
@@ -184,6 +185,7 @@ public class EnemyController : MonoBehaviour
 
         yield return new WaitForSeconds((1 / attackSpeed) - (1 / attackSpeed) * attackDamageDelay);
         isAttacking = false;
+        animator.SetFloat("Attack_Ranged", 0);
     }
 
     IEnumerator IsAlive()

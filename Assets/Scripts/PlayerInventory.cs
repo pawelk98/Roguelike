@@ -1,3 +1,4 @@
+using Mono.Cecil;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,17 +28,30 @@ public class PlayerInventory : MonoBehaviour
         public int type; //0-fists, 1-onehand, 2-twohand, 3-Bow, 4-Staff
     }
 
+    [Serializable]
+    public class Armor
+    {
+        public string name;
+        public int price;
+        public int pricePerLvl;
+        public float armor;
+        public float armorPerLvl; 
+    }
+
     private static PlayerInventory instance;
     public static PlayerInventory Instance { get { return instance; } }
+    public PlayerCombat combat;
     public Transform rightHand;
     public Transform leftHand;
     public Weapon[] weapons;
     public int[] weaponOwnership;
+    public Armor armor;
+    public int armorOwnership;
     public Weapon currentWeapon;
     public int maxWeaponLvl;
 
     GameObject currentWeaponGameObject;
-    int coins;
+    public int Coins { get; private set; }
 
     private void Awake()
     {
@@ -54,67 +68,111 @@ public class PlayerInventory : MonoBehaviour
     void Start()
     {
         currentWeapon = weapons[0];
-        AddCoins(100000);
-        SetOwnership();
+        combat.damage = weapons[0].damage;
+        AddCoins(Save.Instance.gameData.coins);
+        weaponOwnership = Save.Instance.gameData.weaponOwnership;
+        armorOwnership = Save.Instance.gameData.armorOwnership;
+        SetArmor();
     }
-
-    void SetOwnership()
-    {
-        weaponOwnership = new int[weapons.Length - 1];
-        foreach (int i in weaponOwnership)
-            weaponOwnership[i] = 0;
-    }
-    
     public string[] GetPrices()
     {
-        string[] prices = new string[weapons.Length - 1];
+        string[] prices = new string[weapons.Length];
+        int[] pricesVal = GetPricesValue();
         for (int i = 1; i < weapons.Length; i++)
         {
             if (weapons[i].price != -1)
-                prices[i - 1] = weapons[i].price.ToString() + "G";
+                prices[i - 1] = pricesVal[i-1].ToString() + "g";
             else
                 prices[i - 1] = "MAX";
         }
+        if (armor.price != -1)
+            prices[weapons.Length - 1] = pricesVal[weapons.Length - 1].ToString() + "g";
+        else
+            prices[weapons.Length - 1] = "MAX"; 
+
         return prices;
+    }
+
+    int[] GetPricesValue()
+    {
+        int[] prices = new int[weaponOwnership.Length + 1];
+
+        for (int i = 0; i < weaponOwnership.Length; i++)
+        {
+            prices[i] = weapons[i + 1].price + weaponOwnership[i] * weapons[i + 1].pricePerLvl;
+            if (weaponOwnership[i] == maxWeaponLvl)
+                weapons[i + 1].price = -1;
+        }
+        prices[weaponOwnership.Length] = armor.price + armorOwnership * armor.pricePerLvl;
+        if (armorOwnership == 6)
+            armor.price = -1;
+        return prices;
+    }
+
+    void SetDamage(int weaponId)
+    {
+        combat.damage = weapons[weaponId].damage + weapons[weaponId].damagePerLvl * (weaponOwnership[weaponId - 1] - 1);
+    }
+
+    void SetArmor()
+    {
+        if (armorOwnership == 0)
+            combat.armor = 1;
+        else
+            combat.armor = 1 + armor.armor + armor.armorPerLvl * (armorOwnership - 1);
     }
 
     public string[] GetNames()
     {
-        string[] names = new string[weapons.Length - 1];
+        string[] names = new string[weapons.Length];
+
         for (int i = 1; i < weapons.Length; i++)
             names[i - 1] = weaponOwnership[i - 1].ToString() + " " + weapons[i].name;
+        names[weapons.Length - 1] = armorOwnership.ToString() + " " + armor.name;
         return names;
     }
 
     public void PurchaseWeapon(int id)
     {
-        if (weapons[id + 1].price <= coins && weaponOwnership[id] < maxWeaponLvl)
+        int[] prices = GetPricesValue();
+        if(id == weapons.Length - 1)
         {
-            coins -= weapons[id + 1].price;
-            if (weaponOwnership[id] != 0)
-                weapons[id + 1].damage += weapons[id + 1].damagePerLvl;
-
-            weapons[id + 1].price += weapons[id + 1].pricePerLvl;
-
-            if (weaponOwnership[id] == maxWeaponLvl - 1)
-                weapons[id + 1].price = -1;
-
-            weaponOwnership[id]++;
-            SwitchWeapon(id + 1);
-            UIController.Instance.SetCoins(coins);
+            if (prices[id] <= Coins && armorOwnership < 6)
+            {
+                Coins -= prices[id];
+                armorOwnership++;
+                SetArmor();
+                Save.Instance.SetArmorOwnership(armorOwnership);
+                UIController.Instance.SetCoins(Coins);
+            }
+        }
+        else
+        {
+            if (prices[id] <= Coins && weaponOwnership[id] < maxWeaponLvl)
+            {
+                Coins -= weapons[id + 1].price;
+                weaponOwnership[id]++;
+                Save.Instance.SetWeaponOwnership(id, weaponOwnership[id]);
+                SwitchWeapon(id + 1);
+                SetDamage(id + 1);
+                UIController.Instance.SetCoins(Coins);
+            }
         }
     }
 
     public void EquipWeapon(int id)
     {
-        if (weaponOwnership[id] > 0)
+        if (id < weaponOwnership.Length && weaponOwnership[id] > 0)
+        {
             SwitchWeapon(id + 1);
+            SetDamage(id + 1);
+        }
     }
 
     public void AddCoins(int ammount)
     {
-        coins += ammount;
-        UIController.Instance.SetCoins(coins);
+        Coins += ammount;
+        UIController.Instance.SetCoins(Coins);
     }
 
     public void SwitchWeapon(int weaponID)

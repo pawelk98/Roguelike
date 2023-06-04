@@ -18,8 +18,6 @@ public class LevelGenerator : MonoBehaviour
     public int mazeStart = 0;
     public int mazeEnd;
     public int mazeMaxLength;
-    public int offTrackDoorChance;
-    public int treasureRoomChance;
     public Vector2 offset;
 
     public PlayerSpawn playerSpawn;
@@ -44,16 +42,6 @@ public class LevelGenerator : MonoBehaviour
                 int cellID = x + y * size.x;
                 if (board[cellID].visited)
                 {
-                    if(cellID != mazeEnd) //boss room has only one entrance
-                    {
-                        List<int> neighbors = CheckNeighbors(x + y * size.x, true);
-                        for (int i = 0; i < neighbors.Count; i++)
-                        {
-                            if (Random.Range(0, 100) <= offTrackDoorChance / 2 && neighbors[i] != mazeEnd)
-                                AddPath(cellID, neighbors[i]);
-                        }
-                    }
-
                     if (cellID == mazeStart)
                     {
                         startingRoom = roomGenerator.GenerateRoom(RoomGenerator.RoomType.Start, new Vector3(x * offset.x, 0, y * offset.y), board[cellID].status);
@@ -61,10 +49,6 @@ public class LevelGenerator : MonoBehaviour
                     else if(cellID == mazeEnd)
                     {
                         roomGenerator.GenerateRoom(RoomGenerator.RoomType.Boss, new Vector3(x * offset.x, 0, y * offset.y), board[cellID].status);
-                    }
-                    else if(Random.Range(0,100) < treasureRoomChance)
-                    {
-                        roomGenerator.GenerateRoom(RoomGenerator.RoomType.Treasure, new Vector3(x * offset.x, 0, y * offset.y), board[cellID].status);
                     }
                     else
                     {
@@ -105,7 +89,7 @@ public class LevelGenerator : MonoBehaviour
                 break;
             }
 
-            List<int> neighbors = CheckNeighbors(currentCell, false);
+            List<int> neighbors = CheckNeighbors(currentCell);
 
             if (neighbors.Count == 0)
             {
@@ -129,27 +113,27 @@ public class LevelGenerator : MonoBehaviour
         GenerateDungeon();
     }
 
-    List<int> CheckNeighbors(int cell, bool visited)
+    List<int> CheckNeighbors(int cell)
     {
         List<int> neighbors = new List<int>();
 
         //up
-        if (cell + size.x < board.Count && board[cell + size.x].visited == visited)
+        if (cell + size.x < board.Count)
         {
             neighbors.Add(cell + size.x);
         }
         //down
-        if (cell - size.x >= 0 && board[cell - size.x].visited == visited)
+        if (cell - size.x >= 0)
         {
             neighbors.Add(cell - size.x);
         }
         //left
-        if (cell % size.x != 0 && board[cell - 1].visited == visited)
+        if (cell % size.x != 0)
         {
             neighbors.Add(cell - 1);
         }
         //right
-        if ((cell + 1) % size.x != 0 && board[cell + 1].visited == visited)
+        if ((cell + 1) % size.x != 0)
         {
             neighbors.Add(cell + 1);
         }

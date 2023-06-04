@@ -9,6 +9,7 @@ public class RoomController : MonoBehaviour
     public GameObject torch;
     public RoomGenerator.RoomType roomType;
     public GameObject[] doors;
+    public GameObject finalChest;
     public BoxCollider boxCollider;
     public MeshRenderer[] meshRenderers;
     public Transform interior;
@@ -63,15 +64,11 @@ public class RoomController : MonoBehaviour
             probabilities = Enemies.Instance.GetEnemiesProbability();
             roomGoal = UnityEngine.Random.Range(0, 3);
         }
-        else if(roomType == RoomGenerator.RoomType.Treasure)
-        {
-            roomGoal = 3;
-        }
         else if (roomType == RoomGenerator.RoomType.Boss)
         {
             enemies = Enemies.Instance.GetEnemies();
             probabilities = Enemies.Instance.GetEnemiesProbability();
-            roomGoal = 4;
+            roomGoal = 3;
         }
 
         spawnerPos = new List<Transform>();
@@ -118,7 +115,7 @@ public class RoomController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey("q") && RoomChange.currentRoom == gameObject)
+        if (Input.GetKey("k") && RoomChange.currentRoom == gameObject)
             KillAllEnemies();
 
         if (isGoalActive)
@@ -134,9 +131,6 @@ public class RoomController : MonoBehaviour
                     TorchGoalScenario();
                     break;
                 case 3:
-                    Debug.Log("Treasure");
-                    break;
-                case 4:
                     BossRoomScenario();
                     break;
                 default:
@@ -326,6 +320,7 @@ public class RoomController : MonoBehaviour
             UIController.Instance.SetGoalProgress("");
             UIController.Instance.SetGoal(5);
             RoomClear();
+            finalChest.SetActive(true);
         }
 
         if (bossScript.currentHealth >= 0)

@@ -211,9 +211,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chestTop: {fileID: 4261724381768709103}
   state: 0
-  coinsRangeMin: 10
-  coinsRangeMax: 50
-  spawnChance: 50
+  coinsRangeMin: 500
+  coinsRangeMax: 1000
 --- !u!1 &3299672201474401761
 GameObject:
   m_ObjectHideFlags: 0

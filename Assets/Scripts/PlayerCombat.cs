@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerCombat : MonoBehaviour
 {
     public float health;
     public float damageFlashDuration;
+    public float damage;
+    public float armor;
 
     public PlayerController playerController;
     public GameObject[] meleeColliderPrefabs;
@@ -34,7 +37,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (!playerController.isDodging)
         {
-            currentHealth -= damage;
+            currentHealth -= damage / armor;
             StartCoroutine(FlashHandler());
             UIController.Instance.SetHealth((int)currentHealth);
             isAlive();
@@ -47,7 +50,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if(!playerController.isDodging)
         {
-            currentHealth -= damage;
+            currentHealth -= damage / armor;
             StartCoroutine(FlashHandler());
             UIController.Instance.SetHealth((int)currentHealth);
             isAlive();
@@ -59,7 +62,7 @@ public class PlayerCombat : MonoBehaviour
     void isAlive()
     {
         if (currentHealth <= 0)
-            UIController.Instance.SetHealth(0);
+            Save.Instance.SaveAndRestart();
     }
 
     public void Heal(float ammount)
@@ -101,7 +104,7 @@ public class PlayerCombat : MonoBehaviour
         if (PlayerInventory.Instance.currentWeapon.type <= 2)    //melee
         {
             GameObject meleeCollider = Instantiate(attackObject, meleeAttackOrigin.transform);
-            meleeCollider.GetComponent<MeleeHitboxController>().SetDamage(PlayerInventory.Instance.currentWeapon.damage);
+            meleeCollider.GetComponent<MeleeHitboxController>().SetDamage(damage);
         }
         else   //ranged
         {
@@ -133,7 +136,7 @@ public class PlayerCombat : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, rangedAttackOrigin);
         bullet.GetComponent<BulletController>().SetBullet(
             direction * PlayerInventory.Instance.currentWeapon.bulletSpeed,
-            PlayerInventory.Instance.currentWeapon.damage, PlayerInventory.Instance.currentWeapon.bulletLifetime);
+            damage, PlayerInventory.Instance.currentWeapon.bulletLifetime);
     }
 
     IEnumerator FlashHandler()

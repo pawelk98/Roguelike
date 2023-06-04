@@ -5,12 +5,11 @@ using static LevelGenerator;
 
 public class RoomGenerator : MonoBehaviour
 {
-    public enum RoomType { Default, Start, Boss, Treasure }
+    public enum RoomType { Default, Start, Boss }
 
     public GameObject[] roomStart;
     public GameObject[] roomDefault;
     public GameObject[] roomBoss;
-    public GameObject[] roomTreasure;
 
     public GameObject GenerateRoom(RoomType roomType, Vector3 position, bool[] connections)
     {
@@ -35,9 +34,6 @@ public class RoomGenerator : MonoBehaviour
                 break;
             case RoomType.Boss:
                 room = roomBoss[Random.Range(0, roomBoss.Length)];
-                break;
-            case RoomType.Treasure:
-                room = roomTreasure[Random.Range(0, roomTreasure.Length)];
                 break;
             default:
                 room = roomStart[0];

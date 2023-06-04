@@ -115,9 +115,6 @@ public class UIController : MonoBehaviour
                 torchesImg.SetActive(true);
                 break;
             case 3:
-                treasureImg.SetActive(true);
-                break;
-            case 4:
                 bossImg.SetActive(true);
                 break;
             case 5:
